@@ -1,0 +1,5 @@
+requests>=2.26.0
+lxml>=4.6.3
+google_trends>=0.7
+duckduckgo_search>=0.5
+google_searching>=0.2
