@@ -18,7 +18,7 @@ while True:
 ### Install
 
 ```python
-in the works
+pip install -U fake_traffic
 ```
 
 ### Dependencies
