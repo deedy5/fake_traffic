@@ -1,5 +1,5 @@
 from setuptools import setup
-from google_searching import __version__
+from fake_traffic import __version__
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
