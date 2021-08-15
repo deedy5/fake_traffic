@@ -8,15 +8,15 @@ from google_searching import ggl
 from google_trends import realtime_trends
 
 
-__version__ = 0.2
+__version__ = 0.3
 
 
 def real_trends(country='US', language='en-US'):
-    trends = realtime_trends(country=country, language=language, category='h', num_results=20)
+    trends = realtime_trends(country=country, language=language, category='h', num_results=15)
     return trends
 
 def get_url(url):
-    headers = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0"}
+    headers = {"User-Agent": ""Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0""}
     url = f"https://{url}" if ('https://' not in url) else url
     try:
         resp = requests.get(url, headers=headers, timeout=5)
@@ -26,13 +26,13 @@ def get_url(url):
     except:
         return None
 
-def google_search(word, max_results=30):
+def google_search(word, max_results=20):
     query  = word.replace(' ','+')
     search_ggl = ggl(query, max_results=max_results)
     urls = [x['href'].lstrip('https://') for x in search_ggl]
     return urls
 
-def ddg_search(word, max_results=30):
+def ddg_search(word, max_results=20):
     query  = word.replace(' ','+')
     search_ddg = ddg(query, max_results=max_results)
     urls = [x['href'].lstrip('https://') for x in search_ddg]
@@ -53,7 +53,7 @@ def parse_urls(response):
     except:
         return []
 
-def recursive_browse(url, depth=randint(1, 5)):
+def recursive_browse(url, depth=randint(0, 5)):
     if not depth:
         get_url(url)
         return
@@ -62,7 +62,7 @@ def recursive_browse(url, depth=randint(1, 5)):
         recursive_urls = parse_urls(resp)
         if recursive_urls:
             url = choice(recursive_urls)
-            sleep(uniform(3, 30))
+            sleep(uniform(1, 30))
             recursive_browse(url, depth-1)
     
 def fake_traffic(country='US', language='en-US'):
