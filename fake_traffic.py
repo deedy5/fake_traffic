@@ -67,8 +67,8 @@ def recursive_browse(url, depth=randint(0, 5)):
 def fake_traffic(country='US', language='en-US'):
     print('*** Fake traffic ***')
     while True:
-        print(datetime.now())
-        print(f'\n------GET TRENDS IN {country=}------')
+        print(f'\n{datetime.now()}')
+        print(f'------GET TRENDS IN {country=}------')
         trends = real_trends(country=country, language=language)
         trend = choice(trends)
         word = ' '.join(sample(trend['entity_names'], 2))
