@@ -1,4 +1,5 @@
-from random import uniform, choice, randint
+from random import uniform, choice, randint, sample
+from datetime import datetime
 from time import sleep
 
 import requests
@@ -7,12 +8,10 @@ from duckduckgo_search import ddg
 from google_searching import ggl
 from google_trends import realtime_trends
 
-
-__version__ = 0.3
-
+__version__ = 0.4
 
 def real_trends(country='US', language='en-US'):
-    trends = realtime_trends(country=country, language=language, category='h', num_results=15)
+    trends = realtime_trends(country=country, language=language, category='h', num_results=20)
     return trends
 
 def get_url(url):
@@ -68,10 +67,11 @@ def recursive_browse(url, depth=randint(0, 5)):
 def fake_traffic(country='US', language='en-US'):
     print('*** Fake traffic ***')
     while True:
+        print(datetime.now())
         print(f'\n------GET TRENDS IN {country=}------')
         trends = real_trends(country=country, language=language)
         trend = choice(trends)
-        word = ' '.join(trend['entity_names'][:2])
+        word = ' '.join(sample(trend['entity_names'], 2))
         article_urls = trend['article_urls']
         print(f"*** Trend = {word} ***")
         google_urls, ddg_urls = [], []
@@ -91,7 +91,6 @@ def fake_traffic(country='US', language='en-US'):
         for i, url in enumerate(article_urls, start=1):
             recursive_browse(url)
             print(f"{i}/{len(article_urls)} urls recursive browsing.")
-            
-    
+
 if __name__ == '__main__':
     fake_traffic(country='US', language='en-US')
