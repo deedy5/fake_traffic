@@ -8,7 +8,7 @@ from duckduckgo_search import ddg
 from google_searching import ggl
 from google_trends import realtime_trends
 
-__version__ = 0.4
+__version__ = 0.5
 
 def real_trends(country='US', language='en-US'):
     trends = realtime_trends(country=country, language=language, category='h', num_results=20)
