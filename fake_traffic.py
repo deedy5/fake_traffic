@@ -22,6 +22,9 @@ def get_url(url):
         if resp.status_code == 200:
             print(resp.status_code, url)
             return resp
+    except requests.ConnectionError:
+        print("Connection error. Sleep 60 sec.")
+        sleep(60)
     except:
         return None
 
