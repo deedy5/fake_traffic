@@ -23,8 +23,8 @@ def get_url(url):
             print(resp.status_code, url)
             return resp
     except requests.exceptions.ConnectionError:
-        print("Connection error. Sleep 60 sec.")
-        sleep(60)
+        print("Connection error. Sleep 30-60 sec.")
+        sleep(uniform(30, 60))
     except:
         return None
 
