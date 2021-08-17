@@ -22,7 +22,7 @@ def get_url(url):
         if resp.status_code == 200:
             print(resp.status_code, url)
             return resp
-    except requests.ConnectionError:
+    except requests.exceptions.ConnectionError:
         print("Connection error. Sleep 60 sec.")
         sleep(60)
     except:
@@ -94,6 +94,7 @@ def fake_traffic(country='US', language='en-US'):
         for i, url in enumerate(article_urls, start=1):
             recursive_browse(url)
             print(f"{i}/{len(article_urls)} urls recursive browsing.")
+        sleep(uniform(1, 5))
 
 if __name__ == '__main__':
     fake_traffic(country='US', language='en-US')
