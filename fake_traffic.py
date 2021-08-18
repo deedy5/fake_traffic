@@ -45,7 +45,8 @@ def parse_urls(response):
                  "itunes.apple.com", "l.facebook.com", "bit.ly",
                  "mediawiki", ".css", ".ico", ".xml", "intent/tweet",
                  "twitter.com/share", "signup", "login", "dialog/feed?",
-                 ".json", ".svg", ".gif", "zendesk", "clickserve",]  
+                 ".json", ".svg", ".gif", "zendesk", "clickserve",
+                 "mailto:"]  
     try:
         tree = html.fromstring(response.text)
         tree.make_links_absolute(response.url)
