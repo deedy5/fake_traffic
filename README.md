@@ -36,3 +36,21 @@ from fake_traffic import fake_traffic
 
 fake_traffic(country='US', language='en-US")
 ```
+---
+### Example
+Mimic traffic of a user located in Turkey.
+
+Find Turkey country code ([ISO 3166-1 Alpha-2 code](https://www.iso.org/obp/ui/)):</br>
+  - country = "TR" </br>
+
+Find Turkey country-language code ([ISO-639 and ISO-3166](https://www.fincher.org/Utilities/CountryLanguageList.shtml)): </br>
+  - english  "en-TR", </br>
+  - kurdish  "ku-TR", </br>
+  - turkish  "tr-TR". </br>
+
+
+```python
+from fake_traffic import fake_traffic
+
+fake_traffic(country="TR", language="ku-TR")
+```
