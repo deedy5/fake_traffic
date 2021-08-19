@@ -93,9 +93,9 @@ def fake_traffic(country='US', language='en-US'):
         except:
             print('ddg search error')
         print(f"Recursive browsing {len(article_urls)} urls. Wait...")
-        for i, url in enumerate(article_urls, start=1):
+        for i, url in enumerate(article_urls, start=1):            
+            print(f"{i}/{len(article_urls)} urls recursive browsing...")
             recursive_browse(url)
-            print(f"{i}/{len(article_urls)} urls recursive browsing.")
         sleep(uniform(1, 10))
 
 if __name__ == '__main__':
