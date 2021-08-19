@@ -8,7 +8,7 @@ from duckduckgo_search import ddg
 from google_searching import ggl
 from google_trends import realtime_trends
 
-__version__ = 0.5
+__version__ = 0.6
 
 def real_trends(country='US', language='en-US'):
     trends = realtime_trends(country=country, language=language, category='h', num_results=20)
@@ -46,7 +46,8 @@ def parse_urls(response):
                  "mediawiki", ".css", ".ico", ".xml", "intent/tweet",
                  "twitter.com/share", "signup", "login", "dialog/feed?",
                  ".json", ".svg", ".gif", "zendesk", "clickserve",
-                 "mailto:"]  
+                 "mailto:", "smart-captcha/", "Login", "mail.google.com",
+                 ".jpg", ".jpeg", ".png", ".iso",]
     try:
         tree = html.fromstring(response.text)
         tree.make_links_absolute(response.url)
@@ -95,7 +96,7 @@ def fake_traffic(country='US', language='en-US'):
         for i, url in enumerate(article_urls, start=1):
             recursive_browse(url)
             print(f"{i}/{len(article_urls)} urls recursive browsing.")
-        sleep(uniform(1, 5))
+        sleep(uniform(1, 10))
 
 if __name__ == '__main__':
     fake_traffic(country='US', language='en-US')
