@@ -116,8 +116,9 @@ def _thread(trend):
         recursive_browse(url, depth=randint(max(0, 9-i), max(5, 11-i)))    
     
 def fake_traffic(country='US', language='en-US', threads=THREADS, min_wait=MIN_WAIT, max_wait=MAX_WAIT, debug=DEBUG):
-""" Imitating an Internet user by mimicking popular web traffic (internet traffic generator).
-
+    """
+    Imitating an Internet user by mimicking popular web traffic (internet traffic generator).
+    
     country = country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/),
     language = country-language code ISO-639 and ISO-3166 (https://www.fincher.org/Utilities/CountryLanguageList.shtml),
     threads = number of threads (defaults to 1),
