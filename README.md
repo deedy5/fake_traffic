@@ -42,7 +42,7 @@ fake_traffic(country='US', language='en-US")
 ```python
 from fake_traffic import fake_traffic
 
-fake_traffic(country='US', language='en-US", threads=2, min_wait=1, max_wait=5, debug=True)
+fake_traffic(country='US', language='en-US', threads=2, min_wait=1, max_wait=5, debug=True)
     """
     Imitating an Internet user by mimicking popular web traffic (internet traffic generator).
     
