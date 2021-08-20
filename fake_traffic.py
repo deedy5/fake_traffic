@@ -12,7 +12,6 @@ from google_trends import realtime_trends
 
 __version__ = 0.7
 
-
 THREADS = 1
 MIN_WAIT = 1
 MAX_WAIT = 30
@@ -55,7 +54,6 @@ def get_url(url):
         sleep(uniform(25, 35))
     except:
         debug_print("Error")
-
 
 def google_search(word, max_results=20):
     query  = word.replace(' ','+')
