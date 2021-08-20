@@ -43,12 +43,15 @@ fake_traffic(country='US', language='en-US")
 from fake_traffic import fake_traffic
 
 fake_traffic(country='US', language='en-US", threads=2, min_wait=1, max_wait=5, debug=True)
-""" country = country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/),
+""" Imitating an Internet user by mimicking popular web traffic (internet traffic generator).
+
+    country = country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/),
     language = country-language code ISO-639 and ISO-3166 (https://www.fincher.org/Utilities/CountryLanguageList.shtml),
     threads = number of threads (defaults to 1),
     min_wait = minimal delay between requests (defaults to 1),
     max_wait = maximum delay between requests (defaults to 30),
     debug = if True, then print the details of the requests (defaults to False).
+    """
 ```
 ---
 ### Example
