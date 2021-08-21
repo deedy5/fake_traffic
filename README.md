@@ -76,8 +76,12 @@ fake_traffic(country="TR", language="ku-TR", threads=2)
 ### Other examples
 Country   | Language  | Function                                     |
 ----------|---------- | ---------------------------------------------|
+Australia | English   | fake_traffic(country="AU", language="en-AU") |
 Brazil    | English   | fake_traffic(country="BR", language="en-BR") |
 Brazil    | Portuguese| fake_traffic(country="BR", language="pt-BR") |
+Canada    | English   | fake_traffic(country="CA", language="en-CA") |
+Canada    | French    | fake_traffic(country="CA", language="fr-CA") |
+Canada    | Mohawk    | fake_traffic(country="CA", language="moh-CA")|
 Chile     | English   | fake_traffic(country="CL", language="en-CL"  |
 Chile     | Mapuche   | fake_traffic(country="CL", language="arn-CL" |
 Chile     | Spanish   | fake_traffic(country="CL", language="en-CL"  |
@@ -119,6 +123,8 @@ United Kingdom | Scottish Gaelic   | fake_traffic(country="GB", language="gd-GB"
 United States  | Arabic    | fake_traffic(country="US", language="ar-US"   |
 United States  | Cherokee  | fake_traffic(country="US", language="chr-US") |
 United States  | English   | fake_traffic(country="US", language="en-US") |
+United States  | Hebrew   | fake_traffic(country="US", language="he-US") |
+United States  | Russian   | fake_traffic(country="US", language="ru-US") |
 
 
 
