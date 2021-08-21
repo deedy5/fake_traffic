@@ -76,58 +76,12 @@ fake_traffic(country="TR", language="ku-TR", threads=2)
 ### Other examples
 Country   | Language  | Function                                     |
 ----------|---------- | ---------------------------------------------|
-Australia | English   | fake_traffic(country="AU", language="en-AU") |
-Brazil    | English   | fake_traffic(country="BR", language="en-BR") |
-Brazil    | Portuguese| fake_traffic(country="BR", language="pt-BR") |
-Canada    | English   | fake_traffic(country="CA", language="en-CA") |
-Canada    | French    | fake_traffic(country="CA", language="fr-CA") |
-Canada    | Mohawk    | fake_traffic(country="CA", language="moh-CA")|
-Chile     | English   | fake_traffic(country="CL", language="en-CL"  |
-Chile     | Mapuche   | fake_traffic(country="CL", language="arn-CL" |
-Chile     | Spanish   | fake_traffic(country="CL", language="en-CL"  |
-France    | Algeria Arabic | fake_traffic(country="FR", language="ar-DZ") |
-France    | Breton    | fake_traffic(country="FR", language="br-FR") |
 France    | French    | fake_traffic(country="FR", language="fr-FR") |
-Germany   | Syria Arabic | fake_traffic(country="DE", language="ar-SY") |
-Germany   | Kenya Swahili | fake_traffic(country="DE", language="sw-KE") |
-Germany   | Colognian | fake_traffic(country="DE", language="ksh-DE")|
-Germany   | English   | fake_traffic(country="DE", language="en-DE") |
 Germany   | German    | fake_traffic(country="DE", language="de-DE") |
-Hong Kong | Chinese   | fake_traffic(country="HK", language="zh-HK") |
-Hong Kong | English   | fake_traffic(country="HK", language="en-HK") |
 India     | English   | fake_traffic(country="IN", language="en-IN") |
 India     | Hindi     | fake_traffic(country="IN", language="hi-IN") |
-India     | Tibetan   | fake_traffic(country="IN", language="bo-IN") |
-Italy     | English   | fake_traffic(country="IT", language="en-IT") |
-Italy     | German    | fake_traffic(country="IT", language="de-IT") |
-Italy     | Italian   | fake_traffic(country="IT", language="it-IT") |
-Kuwait    | Arabic    | fake_traffic(country="KW", language="ar-KW") |
-Japan     | English   | fake_traffic(country="JP", language="en-JP") |
-Japan     | Japanese  | fake_traffic(country="JP", language="ja-JP") |
-Japan     | North Korea	Korean   | fake_traffic(country="JP", language="ko-KP") |
-Mexico    | English   | fake_traffic(country="MX", language="en-MX") |
-Mexico    | Spanish   | fake_traffic(country="MX", language="es-MX") |
-Poland    | English   | fake_traffic(country="PL", language="en-PL") |
-Poland    | Israel Hebrew    | fake_traffic(country="PL", language="he-IL") |
-Poland    | Polish    | fake_traffic(country="PL", language="pl-PL") |
 Russia    | English   | fake_traffic(country="RU", language="en-RU") |
-Russia    | Romania Romanian  | fake_traffic(country="RU", language="ro-RO") |
 Russia    | Russian   | fake_traffic(country="RU", language="ru-RU") |
-Sweden    | Russia Bashkir   | fake_traffic(country="SE", language="ba-RU") |
-Sweden    | English   | fake_traffic(country="SE", language="en-SE") |
-Sweden    | Northern Sami   | fake_traffic(country="SE", language="se-SE") |
-Sweden    | Swedish   | fake_traffic(country="SE", language="sv-SE") |
 United Arab Emirates | Arabic | fake_traffic(country="AE", language="ar-AE") |
-United Kingdom | South Sudan	Arabic | fake_traffic(country="GB", language="ar-SS") |
-United Kingdom | Afghanistan	Pashto | fake_traffic(country="GB", language="ps-AF") |
 United Kingdom | English   | fake_traffic(country="GB", language="en-GB") |
-United Kingdom | Scottish Gaelic   | fake_traffic(country="GB", language="gd-GB") |
-United States  | Oman Arabic    | fake_traffic(country="US", language="ar-OM"   |
-United States  | Cherokee  | fake_traffic(country="US", language="chr-US") |
 United States  | English   | fake_traffic(country="US", language="en-US") |
-United States  | Israel Hebrew   | fake_traffic(country="US", language="he-IL") |
-United States  | Russian   | fake_traffic(country="US", language="ru-RU") |
-
-
-
-
