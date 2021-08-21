@@ -85,10 +85,11 @@ Canada    | Mohawk    | fake_traffic(country="CA", language="moh-CA")|
 Chile     | English   | fake_traffic(country="CL", language="en-CL"  |
 Chile     | Mapuche   | fake_traffic(country="CL", language="arn-CL" |
 Chile     | Spanish   | fake_traffic(country="CL", language="en-CL"  |
-France    | Arabic    | fake_traffic(country="FR", language="ar-FR") |
+France    | Algeria Arabic | fake_traffic(country="FR", language="ar-DZ") |
 France    | Breton    | fake_traffic(country="FR", language="br-FR") |
 France    | French    | fake_traffic(country="FR", language="fr-FR") |
-Germany   | Arabic    | fake_traffic(country="DE", language="ar-DE") |
+Germany   | Syria Arabic | fake_traffic(country="DE", language="ar-SY") |
+Germany   | Kenya Swahili | fake_traffic(country="DE", language="sw-KE") |
 Germany   | Colognian | fake_traffic(country="DE", language="ksh-DE")|
 Germany   | English   | fake_traffic(country="DE", language="en-DE") |
 Germany   | German    | fake_traffic(country="DE", language="de-DE") |
@@ -103,28 +104,29 @@ Italy     | Italian   | fake_traffic(country="IT", language="it-IT") |
 Kuwait    | Arabic    | fake_traffic(country="KW", language="ar-KW") |
 Japan     | English   | fake_traffic(country="JP", language="en-JP") |
 Japan     | Japanese  | fake_traffic(country="JP", language="ja-JP") |
-Japan     | Ossetic   | fake_traffic(country="JP", language="os-JP") |
+Japan     | North Korea	Korean   | fake_traffic(country="JP", language="ko-KP") |
 Mexico    | English   | fake_traffic(country="MX", language="en-MX") |
 Mexico    | Spanish   | fake_traffic(country="MX", language="es-MX") |
 Poland    | English   | fake_traffic(country="PL", language="en-PL") |
-Poland    | Hebrew    | fake_traffic(country="PL", language="he-PL") |
+Poland    | Israel Hebrew    | fake_traffic(country="PL", language="he-IL") |
 Poland    | Polish    | fake_traffic(country="PL", language="pl-PL") |
 Russia    | English   | fake_traffic(country="RU", language="en-RU") |
-Russia    | Romanian  | fake_traffic(country="RU", language="ro-RU") |
+Russia    | Romania Romanian  | fake_traffic(country="RU", language="ro-RO") |
 Russia    | Russian   | fake_traffic(country="RU", language="ru-RU") |
-Sweden    | Bashkir   | fake_traffic(country="SE", language="ba-SE") |
+Sweden    | Russian Bashkir   | fake_traffic(country="SE", language="ba-RU") |
 Sweden    | English   | fake_traffic(country="SE", language="en-SE") |
 Sweden    | Northern Sami   | fake_traffic(country="SE", language="se-SE") |
 Sweden    | Swedish   | fake_traffic(country="SE", language="sv-SE") |
 United Arab Emirates | Arabic | fake_traffic(country="AE", language="ar-AE") |
-United Kingdom | Arabic   | fake_traffic(country="GB", language="ar-GB") |
+United Kingdom | South Sudan	Arabic | fake_traffic(country="GB", language="ar-SS") |
+United Kingdom | Afghanistan	Pashto | fake_traffic(country="GB", language="ps-AF") |
 United Kingdom | English   | fake_traffic(country="GB", language="en-GB") |
 United Kingdom | Scottish Gaelic   | fake_traffic(country="GB", language="gd-GB") |
-United States  | Arabic    | fake_traffic(country="US", language="ar-US"   |
+United States  | Oman Arabic    | fake_traffic(country="US", language="ar-OM"   |
 United States  | Cherokee  | fake_traffic(country="US", language="chr-US") |
 United States  | English   | fake_traffic(country="US", language="en-US") |
-United States  | Hebrew   | fake_traffic(country="US", language="he-US") |
-United States  | Russian   | fake_traffic(country="US", language="ru-US") |
+United States  | Israel Hebrew   | fake_traffic(country="US", language="he-IL") |
+United States  | Russian   | fake_traffic(country="US", language="ru-RU") |
 
 
 
