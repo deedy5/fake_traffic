@@ -99,11 +99,19 @@ Italy     | Italian   | fake_traffic(country="IT", language="it-IT") |
 Kuwait    | Arabic    | fake_traffic(country="KW", language="ar-KW") |
 Japan     | English   | fake_traffic(country="JP", language="en-JP") |
 Japan     | Japanese  | fake_traffic(country="JP", language="ja-JP") |
+Japan     | Ossetic   | fake_traffic(country="JP", language="os-JP") |
 Mexico    | English   | fake_traffic(country="MX", language="en-MX") |
 Mexico    | Spanish   | fake_traffic(country="MX", language="es-MX") |
+Poland    | English   | fake_traffic(country="PL", language="en-PL") |
+Poland    | Hebrew    | fake_traffic(country="PL", language="he-PL") |
+Poland    | Polish    | fake_traffic(country="PL", language="pl-PL") |
 Russia    | English   | fake_traffic(country="RU", language="en-RU") |
 Russia    | Romanian  | fake_traffic(country="RU", language="ro-RU") |
 Russia    | Russian   | fake_traffic(country="RU", language="ru-RU") |
+Sweden    | Bashkir   | fake_traffic(country="SE", language="ba-SE") |
+Sweden    | English   | fake_traffic(country="SE", language="en-SE") |
+Sweden    | Northern Sami   | fake_traffic(country="SE", language="se-SE") |
+Sweden    | Swedish   | fake_traffic(country="SE", language="sv-SE") |
 United Arab Emirates | Arabic | fake_traffic(country="AE", language="ar-AE") |
 United Kingdom | Arabic   | fake_traffic(country="GB", language="ar-GB") |
 United Kingdom | English   | fake_traffic(country="GB", language="en-GB") |
