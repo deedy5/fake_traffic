@@ -45,7 +45,7 @@ def get_url(url):
       url = url[:url.rindex('#')]
     except:
       pass
-    debug_print(url)
+    debug_print(f'{url}, STATUS: request')
     try:
         resp = requests.get(url, headers=headers, timeout=4)
         if resp.status_code == 200:
@@ -56,10 +56,10 @@ def get_url(url):
             return resp
         debug_print(resp.raise_for_status())      
     except requests.ConnectionError:
-        debug_print("Connection error. Sleep 25-35 sec")
+        debug_print(f'{url}, STATUS: Connection error. Sleep 25-35 sec')
         sleep(uniform(25, 35))
     except:
-        debug_print("Error")
+        debug_print(f'{url}, STATUS: ERROR')
 
 def google_search(word, max_results=20):
     query  = word.replace(' ','+')
