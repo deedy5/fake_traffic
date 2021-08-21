@@ -25,7 +25,8 @@ BLACKLIST = ("https://t.co", "t.umblr.com", "messenger.com",
              "mailto:", "smart-captcha/", "Login", "mail.google.com",
              ".jpg", ".jpeg", ".png", ".iso", ".js", "s.click",
              "javascript:", "whatsapp://", "tel:", "tg://", "/#",
-             "showcaptcha?", "share.php?", "_click_",)
+             "showcaptcha?", "/share.php?", "_click_", "/authorize?",
+             "/join?", ".cs", "/joinchat", "/auth/", "t.me/share",)
 
 def debug_print(*agrs, **kwargs):
     if DEBUG:
@@ -39,6 +40,10 @@ def get_url(url):
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0"}
     if 'https://' not in url and 'http://' not in url:
         url = f"https://{url}"
+    try:
+      url = url[:url.rindex('#')]
+    except:
+      pass
     debug_print(url)
     try:
         resp = requests.get(url, headers=headers, timeout=4)
