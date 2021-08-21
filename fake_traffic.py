@@ -25,7 +25,7 @@ BLACKLIST = ("https://t.co", "t.umblr.com", "messenger.com",
              "mailto:", "smart-captcha/", "Login", "mail.google.com",
              ".jpg", ".jpeg", ".png", ".iso", ".js", "s.click",
              "javascript:", "whatsapp://", "tel:", "tg://", "/#",
-             "showcaptcha?", "share.php?",)
+             "showcaptcha?", "share.php?", "_click_",)
 
 def debug_print(*agrs, **kwargs):
     if DEBUG:
