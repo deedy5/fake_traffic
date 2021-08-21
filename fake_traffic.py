@@ -43,9 +43,9 @@ def get_url(url):
     try:
         resp = requests.get(url, headers=headers, timeout=4)
         if resp.status_code == 200:
-            debug_print(resp.url, resp.status_code)
+            debug_print(f'{resp.url}, STATUS: {resp.status_code}')
             if any(x in resp.url for x in BLACKLIST):
-                debug_print('URL in BLACKLIST')
+                debug_print(f'{resp.url}, STATUS: in BLACKLIST')
                 return None            
             return resp
         debug_print(resp.raise_for_status())      
