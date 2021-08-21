@@ -113,7 +113,7 @@ Poland    | Polish    | fake_traffic(country="PL", language="pl-PL") |
 Russia    | English   | fake_traffic(country="RU", language="en-RU") |
 Russia    | Romania Romanian  | fake_traffic(country="RU", language="ro-RO") |
 Russia    | Russian   | fake_traffic(country="RU", language="ru-RU") |
-Sweden    | Russian Bashkir   | fake_traffic(country="SE", language="ba-RU") |
+Sweden    | Russia Bashkir   | fake_traffic(country="SE", language="ba-RU") |
 Sweden    | English   | fake_traffic(country="SE", language="en-SE") |
 Sweden    | Northern Sami   | fake_traffic(country="SE", language="se-SE") |
 Sweden    | Swedish   | fake_traffic(country="SE", language="sv-SE") |
