@@ -73,3 +73,45 @@ from fake_traffic import fake_traffic
 
 fake_traffic(country="TR", language="ku-TR", threads=2)
 ```
+### Other examples
+Country   | Language  | Function                                     |
+----------|---------- | ---------------------------------------------|
+Brazil    | English   | fake_traffic(country="BR", language="en-BR") |
+Brazil    | Portuguese| fake_traffic(country="BR", language="pt-BR") |
+Chile     | English   | fake_traffic(country="CL", language="en-CL"  |
+Chile     | Mapuche   | fake_traffic(country="CL", language="arn-CL" |
+Chile     | Spanish   | fake_traffic(country="CL", language="en-CL"  |
+France    | Arabic    | fake_traffic(country="FR", language="ar-FR") |
+France    | Breton    | fake_traffic(country="FR", language="br-FR") |
+France    | French    | fake_traffic(country="FR", language="fr-FR") |
+Germany   | Arabic    | fake_traffic(country="DE", language="ar-DE") |
+Germany   | Colognian | fake_traffic(country="DE", language="ksh-DE")|
+Germany   | English   | fake_traffic(country="DE", language="en-DE") |
+Germany   | German    | fake_traffic(country="DE", language="de-DE") |
+Hong Kong | Chinese   | fake_traffic(country="HK", language="zh-HK") |
+Hong Kong | English   | fake_traffic(country="HK", language="en-HK") |
+India     | English   | fake_traffic(country="IN", language="en-IN") |
+India     | Hindi     | fake_traffic(country="IN", language="hi-IN") |
+India     | Tibetan   | fake_traffic(country="IN", language="bo-IN") |
+Italy     | English   | fake_traffic(country="IT", language="en-IT") |
+Italy     | German    | fake_traffic(country="IT", language="de-IT") |
+Italy     | Italian   | fake_traffic(country="IT", language="it-IT") |
+Kuwait    | Arabic    | fake_traffic(country="KW", language="ar-KW") |
+Japan     | English   | fake_traffic(country="JP", language="en-JP") |
+Japan     | Japanese  | fake_traffic(country="JP", language="ja-JP") |
+Mexico    | English   | fake_traffic(country="MX", language="en-MX") |
+Mexico    | Spanish   | fake_traffic(country="MX", language="es-MX") |
+Russia    | English   | fake_traffic(country="RU", language="en-RU") |
+Russia    | Romanian  | fake_traffic(country="RU", language="ro-RU") |
+Russia    | Russian   | fake_traffic(country="RU", language="ru-RU") |
+United Arab Emirates | Arabic | fake_traffic(country="AE", language="ar-AE") |
+United Kingdom | Arabic   | fake_traffic(country="GB", language="ar-GB") |
+United Kingdom | English   | fake_traffic(country="GB", language="en-GB") |
+United Kingdom | Scottish Gaelic   | fake_traffic(country="GB", language="gd-GB") |
+United States  | Arabic    | fake_traffic(country="US", language="ar-US"   |
+United States  | Cherokee  | fake_traffic(country="US", language="chr-US") |
+United States  | English   | fake_traffic(country="US", language="en-US") |
+
+
+
+
