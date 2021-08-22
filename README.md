@@ -4,7 +4,7 @@
 Imitating an Internet user by mimicking popular web traffic (internet traffic generator).
 
 ### How it works:
-```python
+```python3
 1. you specify the country and language,
 while True:
   2. from google trends script gets a list of popular keywords that in real time are searched 
@@ -19,12 +19,12 @@ while True:
 
 ### Install
 
-```python
+```python3
 pip install -U fake_traffic
 ```
 
 ### Dependencies
-```python
+```python3
 lxml
 requests
 google_trends
@@ -33,14 +33,14 @@ google_searching
 ```
 ---
 ### Simple usage
-```python
+```python3
 from fake_traffic import fake_traffic
 
 fake_traffic(country='US', language='en-US")
 ```
 ---
 ### Advanced usage
-```python
+```python3
 from fake_traffic import fake_traffic
 
 fake_traffic(country='US', language='en-US', threads=2, min_wait=1, max_wait=5, debug=True)
@@ -69,10 +69,17 @@ Find Turkey country-language code ([ISO-639 and ISO-3166](https://www.fincher.or
 
 Starting work in two threads:
   - threads=2
-```python
+```python3
 from fake_traffic import fake_traffic
 
 fake_traffic(country="TR", language="ku-TR", threads=2)
+```
+P.S. you can select language from other country. 
+For example, such combinations are also correct:
+```python3
+fake_traffic(country="TR", language="ar-TR")
+fake_traffic(country="US", language="he-IL")
+fake_traffic(country="DE", language="hi-IN")
 ```
 ### Other examples
 Country   | Language  | Function                                     |
