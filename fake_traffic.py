@@ -10,7 +10,7 @@ from google_searching import ggl
 from google_trends import realtime_trends
 
 
-__version__ = 0.9
+__version__ = '0.9.1'
 
 THREADS = 1
 MIN_WAIT = 1
