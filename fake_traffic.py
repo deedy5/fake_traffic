@@ -10,7 +10,7 @@ from google_searching import ggl
 from google_trends import realtime_trends
 
 
-__version__ = 0.8
+__version__ = 0.9
 
 THREADS = 1
 MIN_WAIT = 1
@@ -34,8 +34,13 @@ def debug_print(*agrs, **kwargs):
         print(*agrs, **kwargs)
 
 def real_trends(country='US', language='en-US'):
-    trends = realtime_trends(country=country, language=language, category='h', num_results=20)
-    return trends
+    while True:
+        try:
+            trends = realtime_trends(country=country, language=language, category='h', num_results=20)
+            return trends
+        except:
+            print(f'Google trends error. Sleep 25-35 sec')
+            sleep(uniform(25, 35))
 
 def get_url(url):
     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0"}
