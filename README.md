@@ -60,7 +60,7 @@ fake_traffic(country='US', language='en-US', category='h', threads=2, min_wait=1
 ```
 ---
 ### Example
-Mimic traffic of a user located in Turkey.
+Mimic traffic of a user located in Turkey, who speaks Kurdish and is interested in health
 
 Find Turkey country code ([ISO 3166-1 Alpha-2 code](https://www.iso.org/obp/ui/)):</br>
   - country = "TR" </br>
@@ -70,12 +70,15 @@ Find Turkey country-language code ([ISO-639 and ISO-3166](https://www.fincher.or
   - kurdish  "ku-TR", </br>
   - turkish  "tr-TR". </br>
 
+Set the health category
+  - category = 'm'
+
 Starting work in two threads:
   - threads=2
 ```python3
 from fake_traffic import fake_traffic
 
-fake_traffic(country="TR", language="ku-TR", threads=2)
+fake_traffic(country="TR", language="ku-TR", category='m', threads=2)
 ```
 P.S. you can select language from other country. 
 For example, such combinations are also correct:
@@ -88,11 +91,11 @@ fake_traffic(country="DE", language="hi-IN")
 Country   | Language  | Function                                     |
 ----------|---------- | ---------------------------------------------|
 France    | French    | fake_traffic(country="FR", language="fr-FR") |
-Germany   | German    | fake_traffic(country="DE", language="de-DE") |
-India     | English   | fake_traffic(country="IN", language="en-IN") |
-India     | Hindi     | fake_traffic(country="IN", language="hi-IN") |
-Russia    | English   | fake_traffic(country="RU", language="en-RU") |
-Russia    | Russian   | fake_traffic(country="RU", language="ru-RU") |
-United Arab Emirates | Arabic | fake_traffic(country="AE", language="ar-AE") |
+Germany   | German    | fake_traffic(country="DE", language="de-DE", category='b') |
+India     | English   | fake_traffic(country="IN", language="en-IN", category='all') |
+India     | Hindi     | fake_traffic(country="IN", language="hi-IN", max_wait=10) |
+Russia    | English   | fake_traffic(country="RU", language="en-RU", category='b', threads=3, debug=True) |
+Russia    | Russian   | fake_traffic(country="RU", language="ru-RU", min_wait=0.5, max_wait=3, threads=5) |
+United Arab Emirates | Arabic | fake_traffic(country="AE", language="ar-AE", max_wait=60) |
 United Kingdom | English   | fake_traffic(country="GB", language="en-GB") |
-United States  | English   | fake_traffic(country="US", language="en-US") |
+United States  | English   | fake_traffic(country="US", language="en-US", min_wait=60, max_wait=300) |
