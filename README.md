@@ -73,7 +73,7 @@ Find Turkey country-language code ([ISO-639 and ISO-3166](https://www.fincher.or
   - kurdish  "ku-TR", </br>
   - turkish  "tr-TR". </br>
 
-Set the category ('h', because the user is interested in hot stories)
+Set the category ('h', because the user in the example is interested in hot stories)
   - category = 'h'
 
 Starting work in two threads:
