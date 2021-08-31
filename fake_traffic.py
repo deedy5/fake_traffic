@@ -10,7 +10,7 @@ from google_searching import ggl
 from google_trends import realtime_trends
 
 
-__version__ = '1.0'
+__version__ = '1.0.1'
 
 THREADS = 1
 MIN_WAIT = 1
@@ -133,6 +133,7 @@ def fake_traffic(country='US', language='en-US', category='h', threads=THREADS, 
     category = сategory of interest of a user (defaults to 'h'):
                'all' (all), 'b' (business), 'e' (entertainment), 
                'm' (health), 's' (sports), 't' (sci/tech), 'h' (top stories);
+               if specific categories do not work, leave category='all' or 'h';
     threads = number of threads (defaults to 1),
     min_wait = minimal delay between requests (defaults to 1),
     max_wait = maximum delay between requests (defaults to 30),
