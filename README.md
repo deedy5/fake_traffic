@@ -58,9 +58,11 @@ fake_traffic(country='US', language='en-US', category='h', threads=2, min_wait=1
     debug = if True, then print the details of the requests (defaults to False).
     """
 ```
+***In some countries, some categories and languages do not work. If specific categories do not work, leave category='all' or 'h'.***
+
 ---
 ### Example
-Mimic traffic of a user located in Turkey, who speaks Kurdish and is interested in health
+Mimic traffic of a user located in Turkey, who speaks Kurdish and is interested in hot stories
 
 Find Turkey country code ([ISO 3166-1 Alpha-2 code](https://www.iso.org/obp/ui/)):</br>
   - country = "TR" </br>
@@ -71,14 +73,14 @@ Find Turkey country-language code ([ISO-639 and ISO-3166](https://www.fincher.or
   - turkish  "tr-TR". </br>
 
 Set the health category
-  - category = 'm'
+  - category = 'h'
 
 Starting work in two threads:
   - threads=2
 ```python3
 from fake_traffic import fake_traffic
 
-fake_traffic(country="TR", language="ku-TR", category='m', threads=2)
+fake_traffic(country="TR", language="ku-TR", category='h', threads=2)
 ```
 P.S. you can select language from other country. 
 For example, such combinations are also correct:
