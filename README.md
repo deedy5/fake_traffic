@@ -7,8 +7,8 @@ Imitating an Internet user by mimicking popular web traffic (internet traffic ge
 ```python3
 1. you specify the country, language and category of interests of a user,
 while True:
-  2. from google trends script gets a list of popular keywords that in real time are searched 
-     by people on google search in the specified country in the specified language,
+  2. from google trends the script gets a list of popular keywords that are searched in real time 
+  on google by people with a given category of interest in a given country in a given language,
   threads:
     3. select a random trend, take from there the keywords and urls of related articles,
     4. the selected keywords are searched on google and duckduckgo, the found urls are added 
