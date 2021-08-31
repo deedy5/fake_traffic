@@ -10,7 +10,7 @@ from google_searching import ggl
 from google_trends import realtime_trends
 
 
-__version__ = '0.9.1'
+__version__ = '1.0'
 
 THREADS = 1
 MIN_WAIT = 1
@@ -33,10 +33,10 @@ def debug_print(*agrs, **kwargs):
     if DEBUG:
         print(*agrs, **kwargs)
 
-def real_trends(country='US', language='en-US'):
+def real_trends(country='US', language='en-US', category='h'):        
     while True:
         try:
-            trends = realtime_trends(country=country, language=language, category='h', num_results=20)
+            trends = realtime_trends(country=country, language=language, category=category, num_results=20)
             return trends
         except:
             print(f'Google trends error. Sleep 25-35 sec')
@@ -124,12 +124,15 @@ def _thread(trend):
         debug_print(f"{i}/{len(article_urls)} recursive browse")
         recursive_browse(url, depth=randint(max(0, 9-i), max(5, 11-i)))    
     
-def fake_traffic(country='US', language='en-US', threads=THREADS, min_wait=MIN_WAIT, max_wait=MAX_WAIT, debug=DEBUG):
+def fake_traffic(country='US', language='en-US', category='h', threads=THREADS, min_wait=MIN_WAIT, max_wait=MAX_WAIT, debug=DEBUG):
     """
     Imitating an Internet user by mimicking popular web traffic (internet traffic generator).
     
     country = country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/),
     language = country-language code ISO-639 and ISO-3166 (https://www.fincher.org/Utilities/CountryLanguageList.shtml),
+    category = сategory of interest of a user (defaults to 'h'):
+               'all' (all), 'b' (business), 'e' (entertainment), 
+               'm' (health), 's' (sports), 't' (sci/tech), 'h' (top stories);
     threads = number of threads (defaults to 1),
     min_wait = minimal delay between requests (defaults to 1),
     max_wait = maximum delay between requests (defaults to 30),
@@ -142,11 +145,14 @@ def fake_traffic(country='US', language='en-US', threads=THREADS, min_wait=MIN_W
     MAX_WAIT = max_wait
     DEBUG = debug
     
-    print('*** Fake traffic ***')
+    print(f'*** Fake traffic {__version__} ***')
+    if category not in ('all', 'b', 'e', 'm', 's', 't', 'h'):
+        print('''Wrong category, specify the correct category:\n'all' (all), 'b' (business), 'e' (entertainment),\n'm' (health), 's' (sports), 't' (sci/tech), 'h' (top stories);''')
+        return
     while True:
         print(f'\n{datetime.now()}')
-        print(f'---GET TRENDS IN {country=} {language=}---')
-        trends = real_trends(country=country, language=language)
+        print(f'---GET TRENDS IN {country=} {language=} {category=}---')
+        trends = real_trends(country=country, language=language, category=category)
         trends = sample(trends, threads)        
         with ThreadPoolExecutor(threads) as executor:
             for i, trend in enumerate(trends, start=1):
@@ -156,3 +162,4 @@ def fake_traffic(country='US', language='en-US', threads=THREADS, min_wait=MIN_W
 
 if __name__ == '__main__':
     fake_traffic(country='US', language='en-US')
+
