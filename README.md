@@ -5,7 +5,7 @@ Imitating an Internet user by mimicking popular web traffic (internet traffic ge
 
 ### How it works:
 ```python3
-1. you specify the country and language,
+1. you specify the country, language and category of interests of a user,
 while True:
   2. from google trends script gets a list of popular keywords that in real time are searched 
      by people on google search in the specified country in the specified language,
@@ -43,12 +43,15 @@ fake_traffic(country='US', language='en-US")
 ```python3
 from fake_traffic import fake_traffic
 
-fake_traffic(country='US', language='en-US', threads=2, min_wait=1, max_wait=5, debug=True)
+fake_traffic(country='US', language='en-US', category='h', threads=2, min_wait=1, max_wait=5, debug=True)
     """
     Imitating an Internet user by mimicking popular web traffic (internet traffic generator).
     
     country = country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/),
     language = country-language code ISO-639 and ISO-3166 (https://www.fincher.org/Utilities/CountryLanguageList.shtml),
+    category = сategory of interest of a user (defaults to 'h'):
+               'all' (all), 'b' (business), 'e' (entertainment), 
+               'm' (health), 's' (sports), 't' (sci/tech), 'h' (top stories);
     threads = number of threads (defaults to 1),
     min_wait = minimal delay between requests (defaults to 1),
     max_wait = maximum delay between requests (defaults to 30),
