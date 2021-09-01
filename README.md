@@ -52,15 +52,12 @@ fake_traffic(country='US', language='en-US', category='h', threads=2, min_wait=1
     category = сategory of interest of a user (defaults to 'h'):
                'all' (all), 'b' (business), 'e' (entertainment), 
                'm' (health), 's' (sports), 't' (sci/tech), 'h' (top stories);
-               if specific categories do not work, leave category='all' or 'h';
     threads = number of threads (defaults to 1),
     min_wait = minimal delay between requests (defaults to 1),
     max_wait = maximum delay between requests (defaults to 30),
     debug = if True, then print the details of the requests (defaults to False).
     """
 ```
-***In some countries, some categories and languages do not work. If specific categories do not work, leave category='all' or 'h'.***
-
 ---
 ### Example
 Mimic traffic of a user located in Turkey, who speaks Kurdish and is interested in hot stories
