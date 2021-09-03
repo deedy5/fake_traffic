@@ -16,14 +16,16 @@ while True:
     5. the script sequentially sends requests to a list of urls,
     6. in each open url, recursive queries to random links are performed to a random depth (1-5).
 ```
+***Attention! Google realtime trends, which are not available for all regions, are used as input data. The list of available countries can be viewed on the website: https://trends.google.com/trends/trendingsearches/realtime. In future versions, daily trends will be used if real trends for the desired region are not available.***
 
+---
 ### Install
 
 ```python3
 pip install -U fake_traffic
 ```
-
-### Dependencies
+---
+### Dependencies (are installed automatically)
 ```python3
 lxml
 requests
@@ -87,6 +89,7 @@ fake_traffic(country="TR", language="ar-TR")
 fake_traffic(country="US", language="he-IL")
 fake_traffic(country="DE", language="hi-IN")
 ```
+---
 ### Other examples
 Country   | Language  | Function                                     |
 ----------|---------- | ---------------------------------------------|
@@ -96,6 +99,8 @@ India     | English   | fake_traffic(country="IN", language="en-IN", category='a
 India     | Hindi     | fake_traffic(country="IN", language="hi-IN", max_wait=10) |
 Russia    | English   | fake_traffic(country="RU", language="en-RU", category='b', threads=3, debug=True) |
 Russia    | Russian   | fake_traffic(country="RU", language="ru-RU", min_wait=0.5, max_wait=3, threads=5) |
-United Arab Emirates | Arabic | fake_traffic(country="AE", language="ar-AE", max_wait=60) |
+Brazil | Portuguese | fake_traffic(country="BR", language="pt-BR", category='s', threads=2,  max_wait=60, debug=True) |
 United Kingdom | English   | fake_traffic(country="GB", language="en-GB") |
 United States  | English   | fake_traffic(country="US", language="en-US", min_wait=60, max_wait=300) |
+United States  | Hebrew Israel   | fake_traffic(country="US", language="he-IL") |
+
