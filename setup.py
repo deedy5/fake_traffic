@@ -17,7 +17,7 @@ setup(
     py_modules=["fake_traffic"],
     install_requires=["requests>=2.26.0",
                       "lxml>=4.6.3",
-                      "google_trends>=0.9.2",
+                      "google_trends>=1.0",
                       "duckduckgo_search>=0.5",
                       "google_searching>=0.2"],
     classifiers=[
