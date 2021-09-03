@@ -10,7 +10,7 @@ from google_searching import ggl
 from google_trends import realtime_trends
 
 
-__version__ = '1.0.5'
+__version__ = '1.1'
 
 THREADS = 1
 MIN_WAIT = 1
@@ -22,12 +22,12 @@ BLACKLIST = ("https://t.co", "t.umblr.com", "messenger.com",
              "mediawiki", ".css", ".ico", ".xml", "intent/tweet",
              "twitter.com/share", "signup", "login", "dialog/feed?",
              ".json", ".svg", ".gif", "zendesk", "clickserve",
-             "mailto:", "smart-captcha/", "Login", "mail.google.com",
+             "mailto:", "smart-captcha/", "Login", "mail.",
              ".jpg", ".jpeg", ".png", ".iso", ".js", "s.click",
              "javascript:", "whatsapp://", "tel:", "tg://", "/#",
              "showcaptcha?", "/share.php?", "_click_", "/authorize?",
              "/join?", ".cs", "/joinchat", "/auth/", "t.me/share",
-             "Special:",)
+             "Special:", "/help", "support.", "/support", "/chat")
 
 def debug_print(*agrs, **kwargs):
     if DEBUG:
@@ -126,8 +126,7 @@ def _thread(trend):
     
 def fake_traffic(country='US', language='en-US', category='h', threads=THREADS, min_wait=MIN_WAIT, max_wait=MAX_WAIT, debug=DEBUG):
     """
-    Imitating an Internet user by mimicking popular web traffic (internet traffic generator).
-    
+    Imitating an Internet user by mimicking popular web traffic (internet traffic generator).    
     country = country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/),
     language = country-language code ISO-639 and ISO-3166 (https://www.fincher.org/Utilities/CountryLanguageList.shtml),
     category = сategory of interest of a user (defaults to 'h'):
@@ -162,4 +161,3 @@ def fake_traffic(country='US', language='en-US', category='h', threads=THREADS, 
 
 if __name__ == '__main__':
     fake_traffic(country='US', language='en-US')
-
