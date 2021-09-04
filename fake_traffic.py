@@ -10,7 +10,7 @@ from google_searching import ggl
 from google_trends import realtime_trends
 
 
-__version__ = '1.1'
+__version__ = '1.2'
 
 THREADS = 1
 MIN_WAIT = 1
@@ -27,7 +27,15 @@ BLACKLIST = ("https://t.co", "t.umblr.com", "messenger.com",
              "javascript:", "whatsapp://", "tel:", "tg://", "/#",
              "showcaptcha?", "/share.php?", "_click_", "/authorize?",
              "/join?", ".cs", "/joinchat", "/auth/", "t.me/share",
-             "Special:", "/help", "support.", "/support", "/chat")
+             "Special:", "/help", "support.", "/support", "/chat",
+             "/captcha", "policies")
+
+HEADERS = {
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Upgrade-Insecure-Requests": "1",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0",
+    }
 
 def debug_print(*agrs, **kwargs):
     if DEBUG:
@@ -42,29 +50,37 @@ def real_trends(country='US', language='en-US', category='h'):
             print(f'Google trends error. Sleep 25-35 sec')
             sleep(uniform(25, 35))
 
-def get_url(url):
-    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0"}
+def url_in_blacklist(url):
+    if any(x in url for x in BLACKLIST):
+        debug_print(f'{url}, STATUS: in BLACKLIST')
+        return True
+
+def url_fix(url):
     if 'https://' not in url and 'http://' not in url:
         url = f"https://{url}"
     try:
       url = url[:url.rindex('#')]
     except:
       pass
-    debug_print(f'{url}, STATUS: request')
-    try:
-        resp = requests.get(url, headers=headers, timeout=4)
-        if resp.status_code == 200:
-            debug_print(f'{resp.url}, STATUS: {resp.status_code}')
-            if any(x in resp.url for x in BLACKLIST):
-                debug_print(f'{resp.url}, STATUS: in BLACKLIST')
-                return None            
-            return resp
-        debug_print(resp.raise_for_status())      
-    except requests.ConnectionError:
-        debug_print(f'{url}, STATUS: Connection error. Sleep 25-35 sec')
-        sleep(uniform(25, 35))
-    except:
-        debug_print(f'{url}, STATUS: ERROR')
+    return url    
+
+def get_url(url):
+    url = url_fix(url)
+    if not url_in_blacklist(url):
+        debug_print(f'{url}, STATUS: request')
+        try:            
+            resp = requests.get(url, headers=HEADERS, timeout=4)
+            if resp.status_code == 200:
+                debug_print(f'{resp.url}, STATUS: {resp.status_code}')
+                if url_in_blacklist(resp.url):
+                    return None            
+                return resp
+            debug_print(resp.raise_for_status())      
+        except requests.ConnectionError:
+            debug_print(f'{url}, STATUS: Connection error. Sleep 25-35 sec')
+            sleep(uniform(25, 35))
+        except:
+            debug_print(f'{url}, STATUS: ERROR')
 
 def google_search(word, max_results=20):
     query  = word.replace(' ','+')
