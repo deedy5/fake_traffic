@@ -18,7 +18,7 @@ setup(
     install_requires=["requests>=2.26.0",
                       "lxml>=4.6.3",
                       "google_trends>=1.0",
-                      "duckduckgo_search>=0.5",
+                      "duckduckgo_search>=0.6",
                       "google_searching>=0.2"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
