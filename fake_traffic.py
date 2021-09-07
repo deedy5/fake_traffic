@@ -91,6 +91,7 @@ def google_search(word, max_results=20):
 def ddg_search(word, max_results=20):
     query  = word.replace(' ','+')
     search_ddg = ddg(query, max_results=max_results)
+    search_ddg = search_ddg[:max_results]
     urls = [x['href'].lstrip('https://') for x in search_ddg]
     return urls
 
