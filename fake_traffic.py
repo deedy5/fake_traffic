@@ -9,8 +9,7 @@ from duckduckgo_search import ddg
 from google_searching import ggl
 from google_trends import realtime_trends
 
-
-__version__ = '1.2'
+__version__ = '1.3'
 
 THREADS = 1
 MIN_WAIT = 1
@@ -28,14 +27,14 @@ BLACKLIST = ("https://t.co", "t.umblr.com", "messenger.com",
              "showcaptcha?", "/share.php?", "_click_", "/authorize?",
              "/join?", ".cs", "/joinchat", "/auth/", "t.me/share",
              "Special:", "/help", "support.", "/support", "/chat",
-             "/captcha", "policies")
-
+             "/captcha", "policies", "/terms", "/privacy")
 HEADERS = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
     "Accept-Encoding": "gzip, deflate, br",
     "Upgrade-Insecure-Requests": "1",
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0",
     }
+URLS_CACHE = set()
 
 def debug_print(*agrs, **kwargs):
     if DEBUG:
@@ -66,10 +65,11 @@ def url_fix(url):
 
 def get_url(url):
     url = url_fix(url)
-    if not url_in_blacklist(url):
+    if url not in URLS_CACHE and not url_in_blacklist(url):
         debug_print(f'{url}, STATUS: request')
         try:            
             resp = requests.get(url, headers=HEADERS, timeout=4)
+            URLS_CACHE.add(url)
             if resp.status_code == 200:
                 debug_print(f'{resp.url}, STATUS: {resp.status_code}')
                 if url_in_blacklist(resp.url):
@@ -174,7 +174,8 @@ def fake_traffic(country='US', language='en-US', category='h', threads=THREADS, 
             for i, trend in enumerate(trends, start=1):
                 print(f"Thread {i} start.")
                 executor.submit(_thread, trend)
-                sleep(uniform(25, 35))      
+                sleep(uniform(25, 35))
+        URLS_CACHE.clear()
 
 if __name__ == '__main__':
     fake_traffic(country='US', language='en-US')
