@@ -16,18 +16,17 @@ MIN_WAIT = 1
 MAX_WAIT = 30
 DEBUG = False
 
-BLACKLIST = ("https://t.co", "t.umblr.com", "messenger.com",
-             "itunes.apple.com", "l.facebook.com", "bit.ly",
-             "mediawiki", ".css", ".ico", ".xml", "intent/tweet",
-             "twitter.com/share", "signup", "login", "dialog/feed?",
-             ".json", ".svg", ".gif", "zendesk", "clickserve",
-             "mailto:", "smart-captcha/", "Login", "mail.",
-             ".jpg", ".jpeg", ".png", ".iso", ".js", "s.click",
-             "javascript:", "whatsapp://", "tel:", "tg://", "/#",
-             "showcaptcha?", "/share.php?", "_click_", "/authorize?",
-             "/join?", ".cs", "/joinchat", "/auth/", "t.me/share",
-             "Special:", "/help", "support.", "/support", "/chat",
-             "/captcha", "policies", "/terms", "/privacy")
+BLACKLIST = (
+    "bit.ly", "clickserve", "https://t.co", "itunes.apple.com", "javascript:",
+    "l.facebook.com", "login", "Login", "mail.", "mailto:", "mediawiki",
+    "messenger.com", "policies", "s.click", "showcaptcha?", "signup",
+    "smart-captcha/", "Special:", "support.", "t.umblr.com", "tel:", "tg://",
+    "whatsapp://", "zendesk", "_click_",
+    "/auth/", "/authorize?", "/captcha", "/chat", "/feed?", "/join?", "/joinchat",
+    "/help", "/privacy", "/registration", "/share", "/support", "/terms", "/tweet",
+    ".cs", ".css", ".gif", ".iso", ".jpg", ".jpeg", ".ico", ".js", ".json", ".png",
+    ".svg", ".xml",
+    )
 HEADERS = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
     "Accept-Encoding": "gzip, deflate, br",
