@@ -9,7 +9,7 @@ from duckduckgo_search import ddg
 from google_searching import ggl
 from google_trends import realtime_trends
 
-__version__ = '1.3'
+__version__ = '1.4'
 
 THREADS = 1
 MIN_WAIT = 1
@@ -22,8 +22,9 @@ BLACKLIST = (
     "messenger.com", "policies", "s.click", "showcaptcha?", "signup",
     "smart-captcha/", "Special:", "support.", "t.umblr.com", "tel:", "tg://",
     "whatsapp://", "zendesk", "_click_",
-    "/auth/", "/authorize?", "/captcha", "/chat", "/feed?", "/join?", "/joinchat",
-    "/help", "/privacy", "/registration", "/share", "/support", "/terms", "/tweet",
+    "/auth/", "/authorize?", "/captcha", "/chat", "/click", "/feed?", "/join?",
+    "/joinchat", "/help", "/privacy", "/registration", "/share", "/showcaptcha",
+    "/stat/", "/support", "/terms", "/tos", "/tweet",
     ".cs", ".css", ".gif", ".iso", ".jpg", ".jpeg", ".ico", ".js", ".json", ".png",
     ".svg", ".xml",
     )
@@ -139,11 +140,12 @@ def _thread(trend):
     print(f"Recursive browsing {len(article_urls)} urls. Wait...", end='\n\n')    
     for i, url in enumerate(article_urls, start=1):
         debug_print(f"{i}/{len(article_urls)} recursive browse")
-        recursive_browse(url, depth=randint(max(0, 9-i), max(5, 11-i)))    
+        min_depth = 15 if i <= 10 else 0
+        max_depth = 25 if i <= 10 else 5
+        recursive_browse(url, depth=randint(min_depth, max_depth))    
     
 def fake_traffic(country='US', language='en-US', category='h', threads=THREADS, min_wait=MIN_WAIT, max_wait=MAX_WAIT, debug=DEBUG):
-    """
-    Imitating an Internet user by mimicking popular web traffic (internet traffic generator).    
+    """ Imitating an Internet user by mimicking popular web traffic (internet traffic generator).    
     country = country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/),
     language = country-language code ISO-639 and ISO-3166 (https://www.fincher.org/Utilities/CountryLanguageList.shtml),
     category = сategory of interest of a user (defaults to 'h'):
@@ -179,3 +181,4 @@ def fake_traffic(country='US', language='en-US', category='h', threads=THREADS, 
 
 if __name__ == '__main__':
     fake_traffic(country='US', language='en-US')
+
