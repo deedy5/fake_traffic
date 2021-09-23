@@ -84,6 +84,7 @@ def get_url(url):
 def google_search(word, max_results=20):
     query  = word.replace(' ','+')
     search_ggl = ggl(query, max_results=max_results)
+    search_ggl = search_ggl[:max_results]
     urls = [x['href'].lstrip('https://') for x in search_ggl]
     return urls
 
