@@ -45,9 +45,7 @@ fake_traffic(country='US', language='en-US")
 from fake_traffic import fake_traffic
 
 fake_traffic(country='US', language='en-US', category='h', threads=2, min_wait=1, max_wait=5, debug=True)
-    """
-    Imitating an Internet user by mimicking popular web traffic (internet traffic generator).
-    
+    """ Imitating an Internet user by mimicking popular web traffic (internet traffic generator).    
     country = country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/),
     language = country-language code ISO-639 and ISO-3166 (https://www.fincher.org/Utilities/CountryLanguageList.shtml),
     category = сategory of interest of a user (defaults to 'h'):
