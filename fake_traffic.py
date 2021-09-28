@@ -9,17 +9,17 @@ from duckduckgo_search import ddg
 from google_searching import ggl
 from google_trends import realtime_trends
 
-__version__ = '1.4'
+__version__ = '1.5'
 
-THREADS = 1
+THREADS = 2
 MIN_WAIT = 1
-MAX_WAIT = 30
+MAX_WAIT = 60
 DEBUG = False
 
 BLACKLIST = (
     "bit.ly", "clickserve", "https://t.co", "itunes.apple.com", "javascript:",
-    "l.facebook.com", "login", "Login", "mail.", "mailto:", "mediawiki",
-    "messenger.com", "policies", "s.click", "showcaptcha?", "signup",
+    "l.facebook.com", "legal.twitter.com", "login", "Login", "mail.", "mailto:", 
+    "mediawiki", "messenger.com", "policies", "s.click", "showcaptcha?", "signup",
     "smart-captcha/", "Special:", "support.", "t.umblr.com", "tel:", "tg://",
     "whatsapp://", "zendesk", "_click_",
     "/auth/", "/authorize?", "/captcha", "/chat", "/click", "/feed?", "/join?",
@@ -55,6 +55,7 @@ def url_in_blacklist(url):
         return True
 
 def url_fix(url):
+    url = url.strip('.')
     if 'https://' not in url and 'http://' not in url:
         url = f"https://{url}"
     try:
@@ -140,8 +141,10 @@ def _thread(trend):
     print(f"Recursive browsing {len(article_urls)} urls. Wait...", end='\n\n')    
     for i, url in enumerate(article_urls, start=1):
         debug_print(f"{i}/{len(article_urls)} recursive browse")
-        min_depth = 15 if i <= 10 else 0
-        max_depth = 25 if i <= 10 else 5
+        if i <= 10:
+            min_depth, max_depth = 15, 25
+        else:
+            min_depth, max_depth = 0, 5
         recursive_browse(url, depth=randint(min_depth, max_depth))    
     
 def fake_traffic(country='US', language='en-US', category='h', threads=THREADS, min_wait=MIN_WAIT, max_wait=MAX_WAIT, debug=DEBUG):
