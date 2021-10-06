@@ -51,7 +51,7 @@ fake_traffic(country='US', language='en-US', category='h', threads=2, min_wait=1
     category = сategory of interest of a user (defaults to 'h'):
                'all' (all), 'b' (business), 'e' (entertainment), 
                'm' (health), 's' (sports), 't' (sci/tech), 'h' (top stories);
-    threads = number of threads (defaults to 1),
+    threads = number of threads (defaults to 2),
     min_wait = minimal delay between requests (defaults to 1),
     max_wait = maximum delay between requests (defaults to 30),
     debug = if True, then print the details of the requests (defaults to False).
