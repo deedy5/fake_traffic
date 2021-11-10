@@ -17,9 +17,9 @@ setup(
     py_modules=["fake_traffic"],
     install_requires=["requests>=2.26.0",
                       "lxml>=4.6.3",
-                      "google_trends>=1.0",
-                      "duckduckgo_search>=0.7",
-                      "google_searching>=0.4"],
+                      "google_trends>=1.1",
+                      "duckduckgo_search>=0.8",
+                      "google_searching>=0.5"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: MIT License",
