@@ -8,7 +8,7 @@ setup(
     name="fake_traffic",
     version=__version__,
     author="deedy5",
-    author_email="deedy-ru@ya.ru",
+    author_email="",
     description="Imitating an Internet user by mimicking popular web traffic",
     long_description=long_description,
     long_description_content_type="text/markdown",
