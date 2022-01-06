@@ -19,7 +19,7 @@ setup(
                       "lxml>=4.6.3",
                       "google_trends>=1.1",
                       "duckduckgo_search>=0.8",
-                      "google_searching>=0.5"],
+                      "google_searching>=0.6"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: MIT License",
