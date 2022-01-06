@@ -1,15 +1,15 @@
 from random import uniform, choice, randint, sample
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime
+from datetime import datetime, timedelta
 from time import sleep
 
 import requests
 from lxml import html
 from duckduckgo_search import ddg
 from google_searching import ggl
-from google_trends import realtime_trends
+from google_trends import daily_trends, realtime_trends
 
-__version__ = '1.6.1'
+__version__ = '1.7'
 
 THREADS = 2
 MIN_WAIT = 1
@@ -40,11 +40,20 @@ def debug_print(*agrs, **kwargs):
     if DEBUG:
         print(*agrs, **kwargs)
 
+def get_yesterday():
+    yesterday = datetime.now() - timedelta(1)
+    return datetime.strftime(yesterday, '%Y%m%d')
+
 def real_trends(country='US', language='en-US', category='h'):        
     while True:
         try:
-            trends = realtime_trends(country=country, language=language, category=category, num_results=20)
-            return trends
+            try:
+                trends = realtime_trends(country=country, language=language, category=category, num_results=20)
+                return trends
+            except:
+                print(f'Google realtime trends error. Trying daily trends.')
+                trends = daily_trends(country=country, language=language) + daily_trends(get_yesterday(), country=country, language=language)
+                return trends
         except:
             print(f'Google trends error. Sleep 25-35 sec')
             sleep(uniform(25, 35))
@@ -120,10 +129,14 @@ def recursive_browse(url, depth=randint(0, 5)):
             recursive_browse(url, depth-1)
 
 def _thread(trend):
-    word = ' '.join(sample(trend['entity_names'], 2))
-    article_urls = trend['article_urls']
+    if isinstance(trend, dict):
+        word = ' '.join(sample(trend['entity_names'], 2))
+        article_urls = trend['article_urls']
+    else:
+        word = trend
+        article_urls = []
     print(f"*** Trend = {word} ***")
-       
+    
     google_urls, ddg_urls = [], []
     try:
         google_urls = google_search(word)
@@ -174,7 +187,7 @@ def fake_traffic(country='US', language='en-US', category='h', threads=THREADS, 
         print(f'\n{datetime.now()}')
         print(f'---GET TRENDS IN {country=} {language=} {category=}---')
         trends = real_trends(country=country, language=language, category=category)
-        trends = sample(trends, threads)        
+        trends = sample(trends, threads)
         with ThreadPoolExecutor(threads) as executor:
             for i, trend in enumerate(trends, start=1):
                 print(f"Thread {i} start.")
@@ -184,4 +197,3 @@ def fake_traffic(country='US', language='en-US', category='h', threads=THREADS, 
 
 if __name__ == '__main__':
     fake_traffic(country='US', language='en-US')
-
