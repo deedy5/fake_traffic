@@ -15,8 +15,6 @@ while True:
     5. the script sequentially sends requests to a list of urls,
     6. in each open url, recursive queries to random links are performed to a random depth (1-5).
 ```
-***Attention! Google realtime trends, which are not available for all regions, are used as input data. The list of available countries can be viewed on the website: https://trends.google.com/trends/trendingsearches/realtime. In future versions, daily trends will be used if real trends for the desired region are not available.***
-
 ---
 ### Install
 
