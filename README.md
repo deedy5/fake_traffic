@@ -94,7 +94,7 @@ France    | French    | fake_traffic(country="FR", language="fr-FR") |
 Germany   | German    | fake_traffic(country="DE", language="de-DE", category='b') |
 India     | English   | fake_traffic(country="IN", language="en-IN", category='all') |
 India     | Hindi     | fake_traffic(country="IN", language="hi-IN", max_wait=10) |
-Russia    | English   | fake_traffic(country="RU", language="en-RU", category='b', threads=3, debug=True) |
+Russia    | English   | fake_traffic(country="RU", language="en-US", category='b', threads=3, debug=True) |
 Russia    | Russian   | fake_traffic(country="RU", language="ru-RU", min_wait=0.5, max_wait=3, threads=5) |
 Brazil | Portuguese | fake_traffic(country="BR", language="pt-BR", category='s', threads=2,  max_wait=60, debug=True) |
 United Kingdom | English   | fake_traffic(country="GB", language="en-GB") |
