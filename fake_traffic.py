@@ -9,7 +9,7 @@ from duckduckgo_search import ddg
 from google_searching import ggl
 from google_trends import daily_trends, realtime_trends
 
-__version__ = '1.7'
+__version__ = '1.7.1'
 
 THREADS = 2
 MIN_WAIT = 1
