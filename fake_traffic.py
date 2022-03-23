@@ -2,6 +2,7 @@ from random import uniform, choice, randint, sample
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
 from time import sleep
+from itertools import zip_longest
 
 import requests
 from lxml import html
@@ -9,7 +10,7 @@ from duckduckgo_search import ddg
 from google_searching import ggl
 from google_trends import daily_trends, realtime_trends
 
-__version__ = '1.7.1'
+__version__ = '1.8'
 
 THREADS = 2
 MIN_WAIT = 1
@@ -35,6 +36,14 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0",
     }
 URLS_CACHE = set()
+
+
+
+def grouper(iterable, n):
+    "Collect data into non-overlapping fixed-length chunks or blocks"
+    # grouper('ABCDEFG', 3) --> ABC DEF GNoneNone
+    args = [iter(iterable)] * n
+    return zip_longest(*args, fillvalue=None)
 
 def debug_print(*agrs, **kwargs):
     if DEBUG:
@@ -187,12 +196,14 @@ def fake_traffic(country='US', language='en-US', category='h', threads=THREADS, 
         print(f'\n{datetime.now()}')
         print(f'---GET TRENDS IN {country=} {language=} {category=}---')
         trends = real_trends(country=country, language=language, category=category)
-        trends = sample(trends, threads)
-        with ThreadPoolExecutor(threads) as executor:
-            for i, trend in enumerate(trends, start=1):
-                print(f"Thread {i} start.")
-                executor.submit(_thread, trend)
-                sleep(uniform(25, 35))
+        #trends = sample(trends, threads)
+        for temp_trends in grouper(trends, threads):
+            with ThreadPoolExecutor(threads) as executor:
+                for i, trend in enumerate(temp_trends, start=1):
+                    if trend:
+                        print(f"Thread {i} start.")
+                        executor.submit(_thread, trend)
+                        sleep(uniform(25, 35))
         URLS_CACHE.clear()
 
 if __name__ == '__main__':
