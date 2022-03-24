@@ -1,4 +1,4 @@
-from random import uniform, choice, randint, sample
+from random import uniform, choice, randint, sample, shuffle
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
 from time import sleep
@@ -10,7 +10,7 @@ from duckduckgo_search import ddg
 from google_searching import ggl
 from google_trends import daily_trends, realtime_trends
 
-__version__ = '1.8'
+__version__ = '1.8.1'
 
 THREADS = 2
 MIN_WAIT = 1
@@ -197,6 +197,7 @@ def fake_traffic(country='US', language='en-US', category='h', threads=THREADS, 
         print(f'---GET TRENDS IN {country=} {language=} {category=}---')
         trends = real_trends(country=country, language=language, category=category)
         #trends = sample(trends, threads)
+        shuffle(trends)
         for temp_trends in grouper(trends, threads):
             with ThreadPoolExecutor(threads) as executor:
                 for i, trend in enumerate(temp_trends, start=1):
