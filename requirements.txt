@@ -1,5 +1,5 @@
 requests>=2.27.1
 lxml>=4.7.1
 google_trends>=1.1
-duckduckgo_search>=1.3.5
+duckduckgo_search>=2.7.0
 google_searching>=0.8.1
