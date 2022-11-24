@@ -18,8 +18,8 @@ setup(
     install_requires=["requests>=2.27.1",
                       "lxml>=4.7.1",
                       "google_trends>=1.1",
-                      "duckduckgo_search>=1.3.5",
-                      "google_searching>=0.8"],
+                      "duckduckgo_search>=2.7.0",
+                      "google_searching>=0.8.1"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: MIT License",
@@ -31,6 +31,7 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: Implementation :: CPython",
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
