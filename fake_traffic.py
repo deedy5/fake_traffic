@@ -10,7 +10,7 @@ from duckduckgo_search import ddg
 from google_searching import ggl
 from google_trends import daily_trends, realtime_trends
 
-__version__ = '1.8.1'
+__version__ = '1.8.2'
 
 THREADS = 2
 MIN_WAIT = 1
@@ -30,10 +30,7 @@ BLACKLIST = (
     ".svg", ".xml",
     )
 HEADERS = {
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-    "Accept-Encoding": "gzip, deflate, br",
-    "Upgrade-Insecure-Requests": "1",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101 Firefox/102.0",
     }
 URLS_CACHE = set()
 
