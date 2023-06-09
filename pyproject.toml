@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fake_traffic"
+description = "Imitating an Internet user by mimicking popular web traffic."
+readme = "README.md"
+requires-python = ">=3.7"
+license = {text = "MIT License"}
+keywords = ["python", "traffic generator"]
+authors = [
+  {name = "deedy5"}
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "requests>=2.31.0",
+    "lxml>=4.9.2",
+    "google_trends>=1.1",
+    "duckduckgo_search>=3.8.3",
+    "google_searching>=0.8.1"
+]
+dynamic = ["version"]
+
+[project.urls]  # Optional
+"Homepage" = "https://github.com/deedy5/duckduckgo_search"
+
+[project.scripts]
+fake_traffic = "fake_traffic.cli:fake_traffic"
+
+[tool.setuptools.dynamic]
+version = {attr = "fake_traffic.version.__version__"}

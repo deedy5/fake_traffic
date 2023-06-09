@@ -1,4 +1,4 @@
-import warning
+import warnings
 from random import uniform, choice, randint, sample, shuffle
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
@@ -11,7 +11,8 @@ from duckduckgo_search import DDGS
 from google_searching import ggl
 from google_trends import daily_trends, realtime_trends
 
-__version__ = "1.9.0"
+from .version import __version__
+
 
 THREADS = 2
 MIN_WAIT = 1
@@ -268,7 +269,7 @@ def fake_traffic(
 
     print(f"*** Fake traffic {__version__} ***")
     if category not in ("all", "b", "e", "m", "s", "t", "h"):
-        warning.warn(
+        warnings.warn(
             """Wrong category, specify the correct category:\n'all' (all), 'b' (business), 'e' (entertainment),\n'm' (health), 's' (sports), 't' (sci/tech), 'h' (top stories);"""
         )
         return

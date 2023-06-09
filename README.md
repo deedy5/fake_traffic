@@ -22,13 +22,17 @@ while True:
 pip install -U fake_traffic
 ```
 ---
-### Dependencies (are installed automatically)
+### CLI version
 ```python3
-lxml
-requests
-google_trends
-duckduckgo_search
-google_searching
+fake_traffic -h
+```
+CLI examples:
+```python3
+# user located in Turkey, who speaks Kurdish and is interested in hot stories
+fake_traffic -c tr -l ku-tr -ca h -d
+# user located in Brazil, who speaks Portuguese and is interested in sports
+fake_traffic -c br -l pt-br -ca s -d
+
 ```
 ---
 ### Simple usage
