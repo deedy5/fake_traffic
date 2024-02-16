@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "fake_traffic"
 description = "Imitating an Internet user by mimicking popular web traffic."
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 license = {text = "MIT License"}
 keywords = ["python", "traffic generator"]
 authors = [
@@ -18,20 +18,17 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: Implementation :: CPython",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
-    "requests>=2.31.0",
-    "lxml>=4.9.2",
-    "google_trends>=1.1",
-    "duckduckgo_search>=3.8.3",
-    "google_searching>=0.8.1"
+    "playwright>=1.41.2",
+    "playwright_stealth>=1.0.6",
 ]
 dynamic = ["version"]
 

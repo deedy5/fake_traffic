@@ -1,60 +1,46 @@
-import warnings
-from random import uniform, choice, randint, sample, shuffle
-from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timedelta
+import logging
+import subprocess
+from collections import deque
+from random import choice, randint, shuffle, uniform
 from time import sleep
-from itertools import islice, zip_longest
+from urllib.parse import urljoin
 
-import requests
-from lxml import html
-from duckduckgo_search import DDGS
-from google_searching import ggl
-from google_trends import daily_trends, realtime_trends
-
-from .version import __version__
+from playwright.sync_api import sync_playwright
+from playwright_stealth import stealth_sync
 
 
-THREADS = 2
-MIN_WAIT = 1
-MAX_WAIT = 60
-DEBUG = False
+# playwright install chromium
+res = subprocess.run(
+    "playwright install chromium",
+    shell=True,
+    check=True,
+    capture_output=True,
+    text=True,
+)
+logging.info(res.stdout)
 
 BLACKLIST = (
-    "bit.ly",
-    "clickserve",
-    "https://t.co",
-    "itunes.apple.com",
-    "javascript:",
-    "l.facebook.com",
-    "legal.twitter.com",
-    "login",
-    "Login",
-    "mail.",
-    "mailto:",
-    "mediawiki",
-    "messenger.com",
-    "policies",
-    "s.click",
-    "showcaptcha?",
-    "signup",
-    "smart-captcha/",
-    "Special:",
-    "support.",
-    "t.umblr.com",
-    "tel:",
-    "tg://",
-    "whatsapp://",
-    "zendesk",
-    "_click_",
+    ".cs",
+    ".css",
+    ".gif",
+    ".ico",
+    ".iso",
+    ".jpeg",
+    ".jpg",
+    ".js",
+    ".json",
+    ".png",
+    ".svg",
+    ".xml",
     "/auth/",
     "/authorize?",
     "/captcha",
     "/chat",
     "/click",
     "/feed?",
+    "/help",
     "/join?",
     "/joinchat",
-    "/help",
     "/privacy",
     "/registration",
     "/share",
@@ -64,230 +50,175 @@ BLACKLIST = (
     "/terms",
     "/tos",
     "/tweet",
-    ".cs",
-    ".css",
-    ".gif",
-    ".iso",
-    ".jpg",
-    ".jpeg",
-    ".ico",
-    ".js",
-    ".json",
-    ".png",
-    ".svg",
-    ".xml",
+    "Login",
+    "Special:",
+    "_click_",
+    "bit.ly",
+    "clickserve",
+    "https://t.co",
+    "itunes.apple.com",
+    "javascript:",
+    "l.facebook.com",
+    "legal.twitter.com",
+    "login",
+    "mail.",
+    "mailto:",
+    "mediawiki",
+    "messenger.com",
+    "policies",
+    "s.click",
+    "showcaptcha?",
+    "signup",
+    "smart-captcha/",
+    "support.",
+    "t.umblr.com",
+    "tel:",
+    "tg://",
+    "whatsapp://",
+    "zendesk",
 )
-USERAGENTS = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
-]
-URLS_CACHE = set()
 
 
-def grouper(iterable, n):
-    """Collect data into non-overlapping fixed-length chunks or blocks"""
-    # grouper('ABCDEFG', 3) --> ABC DEF GNoneNone
-    args = [iter(iterable)] * n
-    return zip_longest(*args, fillvalue=None)
+class FakeTraffic:
+    def __init__(
+        self,
+        country="US",
+        language="en-US",
+        category="h",
+        min_wait=1,
+        max_wait=10,
+        headless=True,
+    ):
+        """ Imitating an Internet user by mimicking popular web traffic (internet traffic generator).    
+        country = country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/),
+        language = country-language code ISO-639 and ISO-3166 (https://www.fincher.org/Utilities/CountryLanguageList.shtml),
+        category = сategory of interest of a user (defaults to 'h'):
+                'all' (all), 'b' (business), 'e' (entertainment), 
+                'm' (health), 's' (sports), 't' (sci/tech), 'h' (top stories);
+        min_wait = minimal delay between requests (defaults to 1),
+        max_wait = maximum delay between requests (defaults to 10),
+        headless = True/False (defaults to True).
+        """
+        self.country = country
+        self.language = language
+        self.category = category
+        self.min_wait = min_wait
+        self.max_wait = max_wait
+        self.headless = headless
+        self.urls_queue = deque()
+        self.trends = set()
+        self.page = self.initialize_browser()
 
+    def close(self):
+        self.page.close()
+        self.page.context.close()
+        self.page.browser.close()
 
-def debug_print(*agrs, **kwargs):
-    if DEBUG:
-        print(*agrs, **kwargs)
+    @staticmethod
+    def url_in_blacklist(url):
+        if any(x in url for x in BLACKLIST):
+            logging.info(f"{url}, STATUS: in BLACKLIST")
+            return True
 
+    @staticmethod
+    def url_fix(url):
+        if "https://" not in url and "http://" not in url:
+            url = f"https://{url}"
+        url = url.split("#")[0].split("?")[0]
+        return url
 
-def get_yesterday():
-    yesterday = datetime.now() - timedelta(1)
-    return datetime.strftime(yesterday, "%Y%m%d")
-
-
-def real_trends(country="US", language="en-US", category="h"):
-    while True:
+    def initialize_browser(self):
+        """Initialize browser"""
         try:
-            try:
-                trends = realtime_trends(
-                    country=country,
-                    language=language,
-                    category=category,
-                    num_results=20,
-                )
-                return trends
-            except Exception:
-                print("Google realtime trends error. Trying daily trends.")
-                trends = daily_trends(
-                    country=country, language=language
-                ) + daily_trends(get_yesterday(), country=country, language=language)
-                return trends
-        except Exception:
-            print("Google trends error. Sleep 25-35 sec")
-            sleep(uniform(25, 35))
-
-
-def url_in_blacklist(url):
-    if any(x in url for x in BLACKLIST):
-        debug_print(f"{url}, STATUS: in BLACKLIST")
-        return True
-
-
-def url_fix(url):
-    url = url.strip(".")
-    if "https://" not in url and "http://" not in url:
-        url = f"https://{url}"
-    try:
-        url = url[: url.rindex("#")]
-    except Exception:
-        pass
-    return url
-
-
-def get_url(url):
-    url = url_fix(url)
-    if url not in URLS_CACHE and not url_in_blacklist(url):
-        debug_print(f"{url}, STATUS: request")
-        try:
-            resp = requests.get(
-                url, headers={"User-Agent": choice(USERAGENTS)}, timeout=4
+            p = sync_playwright().__enter__()
+            browser = p.chromium.launch(headless=self.headless, slow_mo=100)
+            context = browser.new_context(
+                locale=self.language,
+                viewport={"width": 1920, "height": 1080},
             )
-            URLS_CACHE.add(url)
-            if resp.status_code == 200:
-                debug_print(f"{resp.url}, STATUS: {resp.status_code}")
-                if url_in_blacklist(resp.url):
-                    return None
-                return resp
-            debug_print(resp.raise_for_status())
-        except requests.ConnectionError:
-            debug_print(f"{url}, STATUS: Connection error. Sleep 25-35 sec")
-            sleep(uniform(25, 35))
-        except Exception:
-            debug_print(f"{url}, STATUS: ERROR")
+            page = context.new_page()
+            stealth_sync(page)
+            return page
+        except Exception as ex:
+            logging.warning(f"{type(ex).__name__}: {ex}")
 
+    def get_url(self, url):
+        url = self.url_fix(url)
+        if not self.url_in_blacklist(url):
+            try:
+                resp = self.page.goto(url)
+                self.page.wait_for_load_state("networkidle")
+                logging.info(f"{resp.url} {resp.status}")
+                return self.page
+            except Exception as ex:
+                logging.warning(f"{url} {type(ex).__name__}: {ex}")
 
-def google_search(word, max_results=20):
-    query = word.replace(" ", "+")
-    search_ggl = ggl(query, max_results=max_results)
-    search_ggl = search_ggl[:max_results]
-    urls = [
-        x["href"].replace("https://", "").replace("http://", "") for x in search_ggl
-    ]
-    return urls
-
-
-def ddg_search(word, max_results=20):
-    query = word.replace(" ", "+")
-    search_ddg = list(islice(DDGS().text(query), max_results))
-    urls = [
-        x["href"].replace("https://", "").replace("http://", "") for x in search_ddg
-    ]
-    return urls
-
-
-def parse_urls(response):
-    try:
-        tree = html.fromstring(response.text)
-        tree.make_links_absolute(response.url)
-        urls = tree.xpath("//a/@href")
-        urls = [url for url in urls if not any(x in url for x in BLACKLIST)]
-        return urls
-    except Exception:
-        return []
-
-
-def recursive_browse(url, depth=randint(0, 5)):
-    if not depth:
-        get_url(url)
-        return
-    resp = get_url(url)
-    if resp:
-        recursive_urls = parse_urls(resp)
-        if recursive_urls:
-            url = choice(recursive_urls)
-            sleep(uniform(MIN_WAIT, MAX_WAIT))
-            recursive_browse(url, depth - 1)
-
-
-def _thread(trend):
-    if isinstance(trend, dict):
-        word = " ".join(sample(trend["entity_names"], 2))
-        article_urls = trend["article_urls"]
-    else:
-        word = trend
-        article_urls = []
-    print(f"*** Trend = {word} ***")
-
-    google_urls, ddg_urls = [], []
-    try:
-        google_urls = google_search(word)
-        print(f"'{word}': google_urls len = {len(google_urls)}")
-        article_urls.extend(url for url in google_urls if url not in article_urls)
-    except Exception:
-        print("google search error")
-    try:
-        ddg_urls = ddg_search(word)
-        print(f"'{word}': ddg_urls len = {len(ddg_urls)}")
-        article_urls.extend(url for url in ddg_urls if url not in article_urls)
-    except Exception:
-        print("ddg search error")
-
-    print(f"Recursive browsing {len(article_urls)} urls. Wait...", end="\n\n")
-    for i, url in enumerate(article_urls, start=1):
-        debug_print(f"{i}/{len(article_urls)} recursive browse")
-        if i <= 10:
-            min_depth, max_depth = 15, 25
-        else:
-            min_depth, max_depth = 0, 5
-        recursive_browse(url, depth=randint(min_depth, max_depth))
-
-
-def fake_traffic(
-    country="US",
-    language="en-US",
-    category="h",
-    threads=THREADS,
-    min_wait=MIN_WAIT,
-    max_wait=MAX_WAIT,
-    debug=DEBUG,
-):
-    """Imitating an Internet user by mimicking popular web traffic (internet traffic generator).
-    country = country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/),
-    language = country-language code ISO-639 and ISO-3166 (https://www.fincher.org/Utilities/CountryLanguageList.shtml),
-    category = сategory of interest of a user (defaults to 'h'):
-               'all' (all), 'b' (business), 'e' (entertainment),
-               'm' (health), 's' (sports), 't' (sci/tech), 'h' (top stories);
-    threads = number of threads (defaults to 1),
-    min_wait = minimal delay between requests (defaults to 1),
-    max_wait = maximum delay between requests (defaults to 30),
-    debug = if True, then print the details of the requests (defaults to False).
-    """
-
-    global THREADS, MIN_WAIT, MAX_WAIT, DEBUG
-    THREADS = threads
-    MIN_WAIT = min_wait
-    MAX_WAIT = max_wait
-    DEBUG = debug
-
-    print(f"*** Fake traffic {__version__} ***")
-    if category not in ("all", "b", "e", "m", "s", "t", "h"):
-        warnings.warn(
-            """Wrong category, specify the correct category:\n'all' (all), 'b' (business), 'e' (entertainment),\n'm' (health), 's' (sports), 't' (sci/tech), 'h' (top stories);"""
+    def google_search(self, query):
+        self.page.goto("https://www.google.com")
+        self.page.fill('textarea[name="q"]', query)
+        self.page.press('textarea[name="q"]', "Enter")
+        self.page.wait_for_load_state("networkidle")
+        result_urls = self.page.query_selector_all(
+            "//div[starts-with(@class, 'g ')]//span/a[@href]"
         )
-        return
-    while True:
-        print(f"\n{datetime.now()}")
-        print(f"---GET TRENDS IN {country=} {language=} {category=}---")
-        trends = real_trends(country=country, language=language, category=category)
-        # trends = sample(trends, threads)
-        shuffle(trends)
-        for temp_trends in grouper(trends, threads):
-            with ThreadPoolExecutor(threads) as executor:
-                for i, trend in enumerate(temp_trends, start=1):
-                    if trend:
-                        print(f"Thread {i} start.")
-                        executor.submit(_thread, trend)
-                        sleep(uniform(25, 35))
-        URLS_CACHE.clear()
+        result_urls = [link.get_attribute("href") for link in result_urls]
+        logging.info(
+            f"google_search() {query=} GOT {len(result_urls)} results"
+        )
+        return result_urls
+
+    def google_trends(self):
+        url = f"https://trends.google.com/trends/trendingsearches/realtime?geo={self.country}&hl={self.language}&category={self.category}"
+        self.page.goto(url)
+        self.page.wait_for_load_state("networkidle")
+        elements = self.page.query_selector_all("//div[@class='title']")
+        trends = [x for e in elements for x in e.inner_text().split(" • ")]
+        logging.info(f"google_trends() GOT {len(trends)} trends")
+        return trends
+
+    def parse_urls(self, page, base_url):
+        try:
+            elements = page.query_selector_all("a")
+            urls = [
+                urljoin(base_url, x) for e in elements if (x := e.get_attribute("href"))
+            ]
+            return urls
+        except Exception as ex:
+            logging.warning(f"parse_urls() {type(ex).__name__}: {ex}")
+            return []
+
+    def recursive_browse(self, url, depth):
+        if depth:
+            resp = self.get_url(url)
+            if resp:
+                urls = self.parse_urls(resp, resp.url)
+                if urls:
+                    url = choice(urls)
+                    sleep(uniform(self.min_wait, self.max_wait))
+                    self.recursive_browse(url, depth - 1)
+
+    def crawl(self):
+        while True:
+            if not self.urls_queue:
+                if not self.trends:
+                    self.trends = self.google_trends()
+                shuffle(self.trends)
+                trend = self.trends.pop()
+                search_results = self.google_search(trend)
+                self.urls_queue = deque(search_results)
+
+            url = self.urls_queue.popleft()
+            depth = randint(3, 10)
+            self.recursive_browse(url, depth)
 
 
 if __name__ == "__main__":
-    fake_traffic(country="US", language="en-US")
+    fake_traffic = FakeTraffic(
+        country="US",
+        language="en-US",
+        category="h",
+        min_wait=1,
+        max_wait=10,
+        headless=True,
+    )
+    fake_traffic.crawl()

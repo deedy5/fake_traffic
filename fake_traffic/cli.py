@@ -1,6 +1,7 @@
 import argparse
+import logging
 
-from fake_traffic import fake_traffic
+from .fake_traffic import FakeTraffic
 
 
 parser = argparse.ArgumentParser(
@@ -29,9 +30,6 @@ parser.add_argument(
     required=False,
 )
 parser.add_argument(
-    "-t", "--threads", default=2, help="default=2. Number of threads.", required=False
-)
-parser.add_argument(
     "-min_w",
     "--min_wait",
     default=1,
@@ -41,25 +39,59 @@ parser.add_argument(
 parser.add_argument(
     "-max_w",
     "--max_wait",
-    default=60,
-    help="default=60. Maximum wait time between requests.",
+    default=10,
+    help="default=10. Maximum wait time between requests.",
     required=False,
 )
 parser.add_argument(
-    "-d", "--debug", action="store_true", help="Print debug information(requests)", required=False
+    "-nh",
+    "--no-headless",
+    dest="headless",
+    action="store_false",
+    help="Run the browser in non-headless mode",
+    required=False,
+)
+parser.add_argument(
+    "-ll",
+    "--logging_level",
+    default="INFO",
+    help="logging level. default=INFO",
+    required=False,
+)
+parser.add_argument(
+    "-lf",
+    "--logging_file",
+    action="store_true",
+    help="save the log into 'fake_traffic.log'",
+    required=False,
 )
 args = parser.parse_args()
+
+# logging
+logging.basicConfig(
+    level=args.logging_level,
+    format="%(asctime)s | %(levelname)s | %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    force=True,
+    handlers=[logging.FileHandler("fake_traffic.log"), logging.StreamHandler()]
+    if args.logging_file
+    else [logging.StreamHandler()],
+)
 
 country = args.country.upper()
 language_split = args.language.split("-")
 language = f"{language_split[0]}-{language_split[1].upper()}"
+logging.info(
+    f"Run crawl with: {country=}, {language=}, category={args.category} min_w={args.min_wait}, max_w={args.max_wait}, headless={args.headless}, logging_level={args.logging_level}, logging_file={args.logging_file}"
+)
 
-fake_traffic(
+
+fake_traffic = FakeTraffic(
     country=country,
     language=language,
     category=args.category,
-    threads=args.threads,
-    min_wait=args.min_wait,
-    max_wait=args.max_wait,
-    debug=args.debug,
+    min_wait=int(args.min_wait),
+    max_wait=int(args.max_wait),
+    headless=args.headless,
 )
+fake_traffic.crawl()

@@ -1,2 +1,2 @@
-from .fake_traffic import fake_traffic
+from .fake_traffic import FakeTraffic
 from .version import __version__
