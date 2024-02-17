@@ -109,11 +109,6 @@ class FakeTraffic:
         self.trends = set()
         self.page = self.initialize_browser()
 
-    def close(self):
-        self.page.close()
-        self.page.context.close()
-        self.page.browser.close()
-
     @staticmethod
     def url_in_blacklist(url):
         if any(x in url for x in BLACKLIST):
