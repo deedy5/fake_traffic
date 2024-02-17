@@ -89,11 +89,11 @@ class FakeTraffic:
         max_wait=10,
         headless=True,
     ):
-        """ Imitating an Internet user by mimicking popular web traffic (internet traffic generator).    
+        """Imitating an Internet user by mimicking popular web traffic (internet traffic generator).
         country = country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/),
         language = country-language code ISO-639 and ISO-3166 (https://www.fincher.org/Utilities/CountryLanguageList.shtml),
-        category = сategory of interest of a user (defaults to 'h'):
-                'all' (all), 'b' (business), 'e' (entertainment), 
+        category = category of interest of a user (defaults to 'h'):
+                'all' (all), 'b' (business), 'e' (entertainment),
                 'm' (health), 's' (sports), 't' (sci/tech), 'h' (top stories);
         min_wait = minimal delay between requests (defaults to 1),
         max_wait = maximum delay between requests (defaults to 10),
@@ -131,7 +131,11 @@ class FakeTraffic:
         """Initialize browser"""
         try:
             p = sync_playwright().__enter__()
-            browser = p.chromium.launch(headless=self.headless, slow_mo=100)
+            browser = p.chromium.launch(
+                args=["--disable-blink-features=AutomationControlled"],
+                headless=self.headless,
+                slow_mo=100,
+            )
             context = browser.new_context(
                 locale=self.language,
                 viewport={"width": 1920, "height": 1080},
@@ -162,9 +166,7 @@ class FakeTraffic:
             "//div[starts-with(@class, 'g ')]//span/a[@href]"
         )
         result_urls = [link.get_attribute("href") for link in result_urls]
-        logging.info(
-            f"google_search() {query=} GOT {len(result_urls)} results"
-        )
+        logging.info(f"google_search() {query=} GOT {len(result_urls)} results")
         return result_urls
 
     def google_trends(self):
