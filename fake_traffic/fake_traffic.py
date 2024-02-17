@@ -169,6 +169,13 @@ class FakeTraffic:
         elements = self.page.query_selector_all("//div[@class='title']")
         trends = [x for e in elements for x in e.inner_text().split(" • ")]
         logging.info(f"google_trends() GOT {len(trends)} trends")
+
+        for e in elements:
+            e.click()
+            self.page.wait_for_selector("//div[@class='carousel-wrapper']")
+            related_urls_elements = self.page.query_selector_all("//div[@class='carousel-wrapper']//a")
+            related_urls = [link.get_attribute("href") for link in related_urls_elements]
+            self.urls_queue.extend(related_urls)
         return trends
 
     def parse_urls(self, page, base_url):
