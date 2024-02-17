@@ -150,8 +150,7 @@ class FakeTraffic:
         url = self.url_fix(url)
         if not self.url_in_blacklist(url):
             try:
-                resp = self.page.goto(url)
-                self.page.wait_for_load_state("networkidle")
+                resp = self.page.goto(url, wait_until="load")
                 logging.info(f"{resp.url} {resp.status}")
                 return self.page
             except Exception as ex:
@@ -161,7 +160,7 @@ class FakeTraffic:
         self.page.goto("https://www.google.com")
         self.page.fill('textarea[name="q"]', query)
         self.page.press('textarea[name="q"]', "Enter")
-        self.page.wait_for_load_state("networkidle")
+        self.page.wait_for_load_state("load")
         result_urls = self.page.query_selector_all(
             "//div[starts-with(@class, 'g ')]//span/a[@href]"
         )
@@ -171,8 +170,7 @@ class FakeTraffic:
 
     def google_trends(self):
         url = f"https://trends.google.com/trends/trendingsearches/realtime?geo={self.country}&hl={self.language}&category={self.category}"
-        self.page.goto(url)
-        self.page.wait_for_load_state("networkidle")
+        self.page.goto(url, wait_until="load")
         elements = self.page.query_selector_all("//div[@class='title']")
         trends = [x for e in elements for x in e.inner_text().split(" • ")]
         logging.info(f"google_trends() GOT {len(trends)} trends")
