@@ -5,7 +5,7 @@ from .fake_traffic import FakeTraffic
 
 
 parser = argparse.ArgumentParser(
-    description="fake_traffic. Imitating an Internet user by mimicking popular web traffic (internet traffic generator)."
+    description="Internet traffic generator. Utilizes real-time google search trends by specified parameters."
 )
 parser.add_argument(
     "-c",
@@ -30,20 +30,6 @@ parser.add_argument(
     required=False,
 )
 parser.add_argument(
-    "-min_w",
-    "--min_wait",
-    default=1,
-    help="default=1. Minimum wait time between requests.",
-    required=False,
-)
-parser.add_argument(
-    "-max_w",
-    "--max_wait",
-    default=10,
-    help="default=10. Maximum wait time between requests.",
-    required=False,
-)
-parser.add_argument(
     "-nh",
     "--no-headless",
     dest="headless",
@@ -52,15 +38,8 @@ parser.add_argument(
     required=False,
 )
 parser.add_argument(
-    "-ll",
-    "--logging_level",
-    default="INFO",
-    help="logging level. default=INFO",
-    required=False,
-)
-parser.add_argument(
     "-lf",
-    "--logging_file",
+    "--logfile",
     action="store_true",
     help="save the log into 'fake_traffic.log'",
     required=False,
@@ -69,12 +48,12 @@ args = parser.parse_args()
 
 # logging
 logging.basicConfig(
-    level=args.logging_level,
+    level=logging.INFO,
     format="%(asctime)s | %(levelname)s | %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
     force=True,
     handlers=[logging.FileHandler("fake_traffic.log"), logging.StreamHandler()]
-    if args.logging_file
+    if args.logfile
     else [logging.StreamHandler()],
 )
 
@@ -82,7 +61,7 @@ country = args.country.upper()
 language_split = args.language.split("-")
 language = f"{language_split[0]}-{language_split[1].upper()}"
 logging.info(
-    f"Run crawl with: {country=}, {language=}, category={args.category} min_w={args.min_wait}, max_w={args.max_wait}, headless={args.headless}, logging_level={args.logging_level}, logging_file={args.logging_file}"
+    f"Run crawl with: {country=}, {language=}, category={args.category}, headless={args.headless}, logfile={args.logfile}"
 )
 
 
@@ -90,8 +69,6 @@ fake_traffic = FakeTraffic(
     country=country,
     language=language,
     category=args.category,
-    min_wait=int(args.min_wait),
-    max_wait=int(args.max_wait),
     headless=args.headless,
 )
 fake_traffic.crawl()

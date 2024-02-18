@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fake_traffic"
-description = "Imitating an Internet user by mimicking popular web traffic."
+description = "Internet traffic generator."
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT License"}
-keywords = ["python", "traffic generator"]
+keywords = ["python", "traffic generator", "fake traffic"]
 authors = [
   {name = "deedy5"}
 ]
@@ -33,7 +33,7 @@ dependencies = [
 dynamic = ["version"]
 
 [project.urls]  # Optional
-"Homepage" = "https://github.com/deedy5/duckduckgo_search"
+"Homepage" = "https://github.com/deedy5/fake_traffic"
 
 [project.scripts]
 fake_traffic = "fake_traffic.cli:fake_traffic"

@@ -1,12 +1,12 @@
+import asyncio
 import logging
 import subprocess
-from collections import deque
-from random import choice, randint, shuffle, uniform
-from time import sleep
-from urllib.parse import urljoin
 
-from playwright.sync_api import sync_playwright
-from playwright_stealth import stealth_sync
+from playwright.async_api import async_playwright
+from playwright_stealth import stealth_async
+
+logger = logging.getLogger("__name__")
+SEMAPHORE = asyncio.Semaphore(5)
 
 
 # playwright install chromium
@@ -17,66 +17,7 @@ res = subprocess.run(
     capture_output=True,
     text=True,
 )
-logging.info(res.stdout)
-
-BLACKLIST = (
-    ".cs",
-    ".css",
-    ".gif",
-    ".ico",
-    ".iso",
-    ".jpeg",
-    ".jpg",
-    ".js",
-    ".json",
-    ".png",
-    ".svg",
-    ".xml",
-    "/auth/",
-    "/authorize?",
-    "/captcha",
-    "/chat",
-    "/click",
-    "/feed?",
-    "/help",
-    "/join?",
-    "/joinchat",
-    "/privacy",
-    "/registration",
-    "/share",
-    "/showcaptcha",
-    "/stat/",
-    "/support",
-    "/terms",
-    "/tos",
-    "/tweet",
-    "Login",
-    "Special:",
-    "_click_",
-    "bit.ly",
-    "clickserve",
-    "https://t.co",
-    "itunes.apple.com",
-    "javascript:",
-    "l.facebook.com",
-    "legal.twitter.com",
-    "login",
-    "mail.",
-    "mailto:",
-    "mediawiki",
-    "messenger.com",
-    "policies",
-    "s.click",
-    "showcaptcha?",
-    "signup",
-    "smart-captcha/",
-    "support.",
-    "t.umblr.com",
-    "tel:",
-    "tg://",
-    "whatsapp://",
-    "zendesk",
-)
+logger.info(res.stdout)
 
 
 class FakeTraffic:
@@ -85,133 +26,88 @@ class FakeTraffic:
         country="US",
         language="en-US",
         category="h",
-        min_wait=1,
-        max_wait=10,
         headless=True,
     ):
-        """Imitating an Internet user by mimicking popular web traffic (internet traffic generator).
+        """Internet traffic generator. Utilizes real-time google search trends by specified parameters.
         country = country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/),
         language = country-language code ISO-639 and ISO-3166 (https://www.fincher.org/Utilities/CountryLanguageList.shtml),
         category = category of interest of a user (defaults to 'h'):
                 'all' (all), 'b' (business), 'e' (entertainment),
                 'm' (health), 's' (sports), 't' (sci/tech), 'h' (top stories);
-        min_wait = minimal delay between requests (defaults to 1),
-        max_wait = maximum delay between requests (defaults to 10),
         headless = True/False (defaults to True).
         """
         self.country = country
         self.language = language
         self.category = category
-        self.min_wait = min_wait
-        self.max_wait = max_wait
         self.headless = headless
-        self.urls_queue = deque()
-        self.trends = set()
-        self.page = self.initialize_browser()
+        self.browser = None
 
-    @staticmethod
-    def url_in_blacklist(url):
-        if any(x in url for x in BLACKLIST):
-            logging.info(f"{url}, STATUS: in BLACKLIST")
-            return True
+    async def abrowse(self, url):
+        async with SEMAPHORE:
+            page = await self.browser.new_page()
+            await stealth_async(page)
+            try:
+                resp = await page.goto(url, wait_until="load")
+                logger.info(f"{resp.status} {resp.url}")
+            except Exception as ex:
+                logger.warning(
+                    f"{type(ex).__name__}: {ex} {url if url not in str(ex) else ''}"
+                )
+            await page.close()
 
-    @staticmethod
-    def url_fix(url):
-        if "https://" not in url and "http://" not in url:
-            url = f"https://{url}"
-        url = url.split("#")[0].split("?")[0]
-        return url
-
-    def initialize_browser(self):
-        """Initialize browser"""
-        try:
-            p = sync_playwright().__enter__()
-            browser = p.chromium.launch(
+    async def acrawl(self):
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(
                 args=["--disable-blink-features=AutomationControlled"],
                 headless=self.headless,
-                slow_mo=100,
             )
-            context = browser.new_context(
+            context = await browser.new_context(
                 locale=self.language,
                 viewport={"width": 1920, "height": 1080},
             )
-            page = context.new_page()
-            stealth_sync(page)
-            return page
-        except Exception as ex:
-            logging.warning(f"{type(ex).__name__}: {ex}")
+            self.browser = context
 
-    def get_url(self, url):
-        url = self.url_fix(url)
-        if not self.url_in_blacklist(url):
-            try:
-                resp = self.page.goto(url, wait_until="load")
-                logging.info(f"{resp.url} {resp.status}")
-                return self.page
-            except Exception as ex:
-                logging.warning(f"{url} {type(ex).__name__}: {ex}")
+            page = await self.browser.new_page()
+            await stealth_async(page)
 
-    def google_search(self, query):
-        self.page.goto("https://www.google.com")
-        self.page.fill('textarea[name="q"]', query)
-        self.page.press('textarea[name="q"]', "Enter")
-        self.page.wait_for_load_state("load")
-        result_urls = self.page.query_selector_all(
-            "//div[starts-with(@class, 'g ')]//span/a[@href]"
-        )
-        result_urls = [link.get_attribute("href") for link in result_urls]
-        logging.info(f"google_search() {query=} GOT {len(result_urls)} results")
-        return result_urls
-
-    def google_trends(self):
-        url = f"https://trends.google.com/trends/trendingsearches/realtime?geo={self.country}&hl={self.language}&category={self.category}"
-        self.page.goto(url, wait_until="load")
-        elements = self.page.query_selector_all("//div[@class='title']")
-        trends = [x for e in elements for x in e.inner_text().split(" • ")]
-        logging.info(f"google_trends() GOT {len(trends)} trends")
-
-        for e in elements:
-            e.click()
-            self.page.wait_for_selector("//div[@class='carousel-wrapper']")
-            related_urls_elements = self.page.query_selector_all("//div[@class='carousel-wrapper']//a")
-            related_urls = [link.get_attribute("href") for link in related_urls_elements]
-            self.urls_queue.extend(related_urls)
-        return trends
-
-    def parse_urls(self, page, base_url):
-        try:
-            elements = page.query_selector_all("a")
-            urls = [
-                urljoin(base_url, x) for e in elements if (x := e.get_attribute("href"))
+            # google trends
+            url = f"https://trends.google.com/trends/trendingsearches/realtime?geo={self.country}&hl={self.language}&category={self.category}"
+            await page.goto(url, wait_until="load")
+            elements = await page.query_selector_all("//div[@class='title']")
+            keywords = [
+                x for e in elements for x in (await e.inner_text()).split(" • ")
             ]
-            return urls
-        except Exception as ex:
-            logging.warning(f"parse_urls() {type(ex).__name__}: {ex}")
-            return []
+            logger.info(f"google_trends() GOT {len(keywords)} keywords")
 
-    def recursive_browse(self, url, depth):
-        if depth:
-            resp = self.get_url(url)
-            if resp:
-                urls = self.parse_urls(resp, resp.url)
-                if urls:
-                    url = choice(urls)
-                    sleep(uniform(self.min_wait, self.max_wait))
-                    self.recursive_browse(url, depth - 1)
+            # google search
+            for keyword in keywords:
+                await page.goto("https://www.google.com")
+                await page.fill('textarea[name="q"]', keyword)
+                await page.press('textarea[name="q"]', "Enter")
+                while True:
+                    # Check for a popup window and close it
+                    if len(self.browser.pages) > 1:
+                        await self.browser.pages[1].close()
+                    # Scroll to the bottom of the page
+                    await page.mouse.wheel(0, 1000)
+                    await page.wait_for_load_state("networkidle")
+                    await asyncio.sleep(0.2)
+                    elements = await page.query_selector_all(
+                        "//div[starts-with(@class, 'g ')]//span/a[@href]"
+                    )
+                    if len(elements) > 50:
+                        break
+                result_urls = [await link.get_attribute("href") for link in elements]
+                logger.info(
+                    f"google_search() {keyword=} GOT {len(result_urls)} results"
+                )
+
+                # browse urls in parallel
+                tasks = [asyncio.create_task(self.abrowse(url)) for url in result_urls]
+                await asyncio.gather(*tasks)
 
     def crawl(self):
-        while True:
-            if not self.urls_queue:
-                if not self.trends:
-                    self.trends = self.google_trends()
-                shuffle(self.trends)
-                trend = self.trends.pop()
-                search_results = self.google_search(trend)
-                self.urls_queue = deque(search_results)
-
-            url = self.urls_queue.popleft()
-            depth = randint(3, 10)
-            self.recursive_browse(url, depth)
+        asyncio.run(self.acrawl())
 
 
 if __name__ == "__main__":
@@ -219,8 +115,6 @@ if __name__ == "__main__":
         country="US",
         language="en-US",
         category="h",
-        min_wait=1,
-        max_wait=10,
         headless=True,
     )
     fake_traffic.crawl()
