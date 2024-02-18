@@ -71,44 +71,56 @@ class FakeTraffic:
             await stealth_async(page)
 
             # google trends
-            url = f"https://trends.google.com/trends/trendingsearches/realtime?geo={self.country}&hl={self.language}&category={self.category}"
-            await page.goto(url, wait_until="load")
-            elements = await page.query_selector_all("//div[@class='title']")
-            keywords = [
-                x for e in elements for x in (await e.inner_text()).split(" • ")
-            ]
-            logger.info(f"google_trends() GOT {len(keywords)} keywords")
+            try:
+                await page.goto(
+                    f"https://trends.google.com/trends/trendingsearches/realtime?geo={self.country}&hl={self.language}&category={self.category}",
+                    wait_until="load",
+                )
+                elements = await page.query_selector_all("//div[@class='title']")
+                keywords = [
+                    x for e in elements for x in (await e.inner_text()).split(" • ")
+                ]
+                logger.info(f"google_trends() GOT {len(keywords)} keywords")
+            except Exception as ex:
+                keywords = []
+                logger.warning(f"google_trends() {type(ex).__name__}: {ex}")
 
             # google search
             for keyword in keywords:
-                await page.goto("https://www.google.com")
-                await page.fill('textarea[name="q"]', keyword)
-                await page.press('textarea[name="q"]', "Enter")
-                while True:
-                    # Check for a popup window and close it
-                    if len(self.browser.pages) > 1:
-                        await self.browser.pages[1].close()
-                    # Scroll to the bottom of the page
-                    await page.mouse.wheel(0, 1000)
-                    await page.wait_for_load_state("networkidle")
-                    await asyncio.sleep(0.2)
-                    elements = await page.query_selector_all(
-                        "//div[starts-with(@class, 'g ')]//span/a[@href]"
+                try:
+                    await page.goto("https://www.google.com", wait_until="load")
+                    await page.fill('textarea[name="q"]', keyword)
+                    await page.press('textarea[name="q"]', "Enter")
+                    while True:
+                        # Check for a popup window and close it
+                        if len(self.browser.pages) > 1:
+                            await self.browser.pages[1].close()
+                        # Scroll to the bottom of the page
+                        await page.mouse.wheel(0, 1000)
+                        await asyncio.sleep(0.25)
+                        elements = await page.query_selector_all(
+                            "//div[starts-with(@class, 'g ')]//span/a[@href]"
+                        )
+                        if len(elements) > 50:
+                            break
+                    result_urls = [await link.get_attribute("href") for link in elements]
+                    logger.info(
+                        f"google_search() {keyword=} GOT {len(result_urls)} results"
                     )
-                    if len(elements) > 50:
-                        break
-                result_urls = [await link.get_attribute("href") for link in elements]
-                logger.info(
-                    f"google_search() {keyword=} GOT {len(result_urls)} results"
-                )
+                except Exception as ex:
+                    result_urls = []
+                    logger.warning(f"google_search() {type(ex).__name__}: {ex}")
 
                 # browse urls in parallel
                 tasks = [asyncio.create_task(self.abrowse(url)) for url in result_urls]
                 await asyncio.gather(*tasks)
 
     def crawl(self):
-        asyncio.run(self.acrawl())
-
+        while True:
+            try:
+                asyncio.run(self.acrawl())
+            except Exception as ex:
+                logger.warning(f"crawl() {type(ex).__name__}: {ex}")
 
 if __name__ == "__main__":
     fake_traffic = FakeTraffic(
