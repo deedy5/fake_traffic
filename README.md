@@ -26,6 +26,8 @@ fake_traffic -c tr -l ku-tr -ca h
 fake_traffic -c ru -l ru-ru -ca s -lf
 # use none-headless mode
 fake_traffic -c en -l en-us -ca t -nh
+# limit the number of tabs in the browser to 2 
+fake_traffic -c en -l en-us -ca t -t 2
 ```
 ---
 ### Simple usage
@@ -46,7 +48,8 @@ ft = FakeTraffic(country='US', language='en-US', category='h', headless=True)
     category = сategory of interest of a user (defaults to 'h'):
                'all' (all), 'b' (business), 'e' (entertainment), 
                'm' (health), 's' (sports), 't' (sci/tech), 'h' (top stories);
-    headless = True/False (defaults to True).
+    headless = True/False (defaults to True);
+    tabs = limit the number of tabs in browser (defaults to 3).
     """
 ft.crawl()
 ```
@@ -92,6 +95,6 @@ Russia    | English   | `FakeTraffic(country="RU", language="en-US", category='b
 Russia    | Russian   | `FakeTraffic(country="RU", language="ru-RU")` |
 Brazil | Portuguese | `FakeTraffic(country="BR", language="pt-BR", category='s')` |
 United Kingdom | English   | `FakeTraffic(country="GB", language="en-GB")` |
-United States  | English   | `FakeTraffic(country="US", language="en-US")` |
+United States  | English   | `FakeTraffic(country="US", language="en-US", tabs=4)` |
 United States  | Hebrew Israel   | `FakeTraffic(country="US", language="he-IL")` |
 

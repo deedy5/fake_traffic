@@ -38,6 +38,14 @@ parser.add_argument(
     required=False,
 )
 parser.add_argument(
+    "-t",
+    "--tabs",
+    default=3,
+    type=int,
+    help="Limit the number of tabs in browser. Defaults to 3",
+    required=False,
+)
+parser.add_argument(
     "-lf",
     "--logfile",
     action="store_true",
@@ -61,7 +69,7 @@ country = args.country.upper()
 language_split = args.language.split("-")
 language = f"{language_split[0]}-{language_split[1].upper()}"
 logging.info(
-    f"Run crawl with: {country=}, {language=}, category={args.category}, headless={args.headless}, logfile={args.logfile}"
+    f"Run crawl with: {country=}, {language=}, category={args.category}, headless={args.headless}, tabs={args.tabs}, logfile={args.logfile}"
 )
 
 
@@ -70,5 +78,6 @@ fake_traffic = FakeTraffic(
     language=language,
     category=args.category,
     headless=args.headless,
+    tabs=args.tabs,
 )
 fake_traffic.crawl()

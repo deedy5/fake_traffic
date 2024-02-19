@@ -6,8 +6,6 @@ from playwright.async_api import async_playwright
 from playwright_stealth import stealth_async
 
 logger = logging.getLogger("__name__")
-SEMAPHORE = asyncio.Semaphore(5)
-
 
 # playwright install chromium
 res = subprocess.run(
@@ -27,6 +25,8 @@ class FakeTraffic:
         language="en-US",
         category="h",
         headless=True,
+        tabs=3,
+        
     ):
         """Internet traffic generator. Utilizes real-time google search trends by specified parameters.
         country = country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/),
@@ -34,16 +34,18 @@ class FakeTraffic:
         category = category of interest of a user (defaults to 'h'):
                 'all' (all), 'b' (business), 'e' (entertainment),
                 'm' (health), 's' (sports), 't' (sci/tech), 'h' (top stories);
-        headless = True/False (defaults to True).
+        headless = True/False (defaults to True);
+        tabs = limit the number of tabs in browser (defaults to 3).
         """
         self.country = country
         self.language = language
         self.category = category
         self.headless = headless
         self.browser = None
+        self.semaphore = asyncio.Semaphore(tabs)
 
     async def abrowse(self, url):
-        async with SEMAPHORE:
+        async with self.semaphore:
             page = await self.browser.new_page()
             await stealth_async(page)
             try:
@@ -128,5 +130,6 @@ if __name__ == "__main__":
         language="en-US",
         category="h",
         headless=True,
+        tabs=3,
     )
     fake_traffic.crawl()
