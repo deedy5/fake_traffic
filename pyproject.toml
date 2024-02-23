@@ -36,7 +36,7 @@ dynamic = ["version"]
 "Homepage" = "https://github.com/deedy5/fake_traffic"
 
 [project.scripts]
-fake_traffic = "fake_traffic.cli:fake_traffic"
+fake_traffic = "fake_traffic.cli:fake_traffic.crawl"
 
 [tool.setuptools.dynamic]
 version = {attr = "fake_traffic.version.__version__"}
