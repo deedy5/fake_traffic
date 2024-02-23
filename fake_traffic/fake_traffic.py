@@ -76,7 +76,7 @@ class FakeTraffic:
             try:
                 await page.goto(
                     f"https://trends.google.com/trends/trendingsearches/realtime?geo={self.country}&hl={self.language}&category={self.category}",
-                    wait_until="load",
+                    wait_until="networkidle",
                 )
                 elements = await page.query_selector_all("//div[@class='title']")
                 keywords = [
