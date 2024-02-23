@@ -93,7 +93,7 @@ class FakeTraffic:
                     await page.goto("https://www.google.com", wait_until="load")
                     await page.fill('textarea[name="q"]', keyword)
                     await page.press('textarea[name="q"]', "Enter")
-                    while True:
+                    for _ in range(30):
                         # Check for a popup window and close it
                         if len(self.browser.pages) > 1:
                             await self.browser.pages[1].close()
@@ -103,7 +103,7 @@ class FakeTraffic:
                         elements = await page.query_selector_all(
                             "//div[starts-with(@class, 'g ')]//span/a[@href]"
                         )
-                        if len(elements) > 50:
+                        if len(elements) > 100:
                             break
                     result_urls = [await link.get_attribute("href") for link in elements]
                     logger.info(
