@@ -118,11 +118,7 @@ class FakeTraffic:
                 await asyncio.gather(*tasks)
 
     def crawl(self):
-        while True:
-            try:
-                asyncio.run(self.acrawl())
-            except Exception as ex:
-                logger.warning(f"crawl() {type(ex).__name__}: {ex}")
+        asyncio.run(self.acrawl())
 
 if __name__ == "__main__":
     fake_traffic = FakeTraffic(
