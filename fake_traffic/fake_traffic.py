@@ -1,21 +1,10 @@
 import asyncio
 import logging
-import subprocess
 
 from playwright.async_api import async_playwright
 from playwright_stealth import stealth_async
 
 logger = logging.getLogger("__name__")
-
-# playwright install chromium
-res = subprocess.run(
-    "playwright install chromium",
-    shell=True,
-    check=True,
-    capture_output=True,
-    text=True,
-)
-logger.info(res.stdout)
 
 
 class FakeTraffic:
@@ -26,7 +15,6 @@ class FakeTraffic:
         category="h",
         headless=True,
         tabs=3,
-        
     ):
         """Internet traffic generator. Utilizes real-time google search trends by specified parameters.
         country = country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/),
@@ -105,7 +93,9 @@ class FakeTraffic:
                         )
                         if len(elements) > 100:
                             break
-                    result_urls = [await link.get_attribute("href") for link in elements]
+                    result_urls = [
+                        await link.get_attribute("href") for link in elements
+                    ]
                     logger.info(
                         f"google_search() {keyword=} GOT {len(result_urls)} results"
                     )
@@ -119,6 +109,7 @@ class FakeTraffic:
 
     def crawl(self):
         asyncio.run(self.acrawl())
+
 
 if __name__ == "__main__":
     fake_traffic = FakeTraffic(
