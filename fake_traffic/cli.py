@@ -80,4 +80,3 @@ fake_traffic = FakeTraffic(
     headless=args.headless,
     tabs=args.tabs,
 )
-fake_traffic.crawl()
