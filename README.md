@@ -34,7 +34,7 @@ fake_traffic -c en -l en-us -ca t -t 2
 ```python3
 from fake_traffic import FakeTraffic
 
-FakeTraffic(country='US', language='en-US").crawl()
+FakeTraffic(country='US', language="en-US").crawl()
 ```
 ---
 ### Advanced usage
