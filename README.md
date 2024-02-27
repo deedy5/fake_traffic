@@ -34,20 +34,20 @@ fake_traffic -c en -l en-us -ca t -t 2
 ```python3
 from fake_traffic import FakeTraffic
 
-FakeTraffic(country='US', language='en-US").crawl()
+FakeTraffic(country="US", language="en-US").crawl()
 ```
 ---
 ### Advanced usage
 ```python3
 from fake_traffic import FakeTraffic
 
-ft = FakeTraffic(country='US', language='en-US', category='h', headless=True)
+ft = FakeTraffic(country="US", language="en-US", category="h", headless=True)
     """Internet traffic generator. Utilizes real-time google search trends by specified parameters.
     country = country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/),
     language = country-language code ISO-639 and ISO-3166 (https://www.fincher.org/Utilities/CountryLanguageList.shtml),
-    category = сategory of interest of a user (defaults to 'h'):
-               'all' (all), 'b' (business), 'e' (entertainment), 
-               'm' (health), 's' (sports), 't' (sci/tech), 'h' (top stories);
+    category = сategory of interest of a user (defaults to "h"):
+               "all" (all), "b" (business), "e" (entertainment), 
+               "m" (health), "s" (sports), "t" (sci/tech), "h" (top stories);
     headless = True/False (defaults to True);
     tabs = limit the number of tabs in browser (defaults to 3).
     """
@@ -65,15 +65,15 @@ Find Turkey country-language code ([ISO-639 and ISO-3166](https://www.fincher.or
   - kurdish  "ku-TR", </br>
   - turkish  "tr-TR". </br>
 
-Set the category ('h', because the user in the example is interested in hot stories):
-  - category = 'h'
+Set the category ("h", because the user in the example is interested in hot stories):
+  - category = "h"
 
 Starting in none-headless mode:
   - headless=False
 ```python3
 from fake_traffic import FakeTraffic
 
-ft = FakeTraffic(country="TR", language="ku-TR", category='h', headless=False)
+ft = FakeTraffic(country="TR", language="ku-TR", category="h", headless=False)
 ft.crawl()
 ```
 P.S. you can select language from other country. 
@@ -88,12 +88,12 @@ FakeTraffic(country="DE", language="hi-IN").crawl()
 Country   | Language  | Function                                     |
 ----------|---------- | ---------------------------------------------|
 France    | French    | `FakeTraffic(country="FR", language="fr-FR")` |
-Germany   | German    | `FakeTraffic(country="DE", language="de-DE", category='b')` |
-India     | English   | `FakeTraffic(country="IN", language="en-IN", category='all')` |
+Germany   | German    | `FakeTraffic(country="DE", language="de-DE", category="b")` |
+India     | English   | `FakeTraffic(country="IN", language="en-IN", category="all")` |
 India     | Hindi     | `FakeTraffic(country="IN", language="hi-IN")` |
-Russia    | English   | `FakeTraffic(country="RU", language="en-US", category='b', headless=False)` |
+Russia    | English   | `FakeTraffic(country="RU", language="en-US", category="b", headless=False)` |
 Russia    | Russian   | `FakeTraffic(country="RU", language="ru-RU")` |
-Brazil | Portuguese | `FakeTraffic(country="BR", language="pt-BR", category='s')` |
+Brazil | Portuguese | `FakeTraffic(country="BR", language="pt-BR", category="s")` |
 United Kingdom | English   | `FakeTraffic(country="GB", language="en-GB")` |
 United States  | English   | `FakeTraffic(country="US", language="en-US", tabs=4)` |
 United States  | Hebrew Israel   | `FakeTraffic(country="US", language="he-IL")` |
