@@ -2,7 +2,6 @@ import asyncio
 import logging
 
 from playwright.async_api import async_playwright
-from playwright_stealth import stealth_async
 
 logger = logging.getLogger("__name__")
 
@@ -35,7 +34,6 @@ class FakeTraffic:
     async def abrowse(self, url):
         async with self.semaphore:
             page = await self.browser.new_page()
-            await stealth_async(page)
             try:
                 resp = await page.goto(url, wait_until="load")
                 logger.info(f"{resp.status} {resp.url}")
@@ -58,7 +56,6 @@ class FakeTraffic:
             self.browser = context
 
             page = await self.browser.new_page()
-            await stealth_async(page)
 
             # google trends
             try:
