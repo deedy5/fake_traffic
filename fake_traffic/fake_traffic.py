@@ -74,34 +74,30 @@ class FakeTraffic:
 
             # google search
             for keyword in keywords:
+                search_urls = []
                 try:
                     await page.goto("https://www.google.com", wait_until="load")
                     await page.fill('textarea[name="q"]', keyword)
                     await page.press('textarea[name="q"]', "Enter")
-                    for _ in range(30):
-                        # Check for a popup window and close it
-                        if len(self.browser.pages) > 1:
-                            await self.browser.pages[1].close()
-                        # Scroll to the bottom of the page
-                        await page.mouse.wheel(0, 1000)
-                        await asyncio.sleep(0.25)
-                        elements = await page.query_selector_all(
-                            "//div[starts-with(@class, 'g ')]//span/a[@href]"
-                        )
-                        if len(elements) > 100:
-                            break
-                    result_urls = [
-                        await link.get_attribute("href") for link in elements
-                    ]
+                    # pagination
+                    for _ in range(10):
+                        await page.wait_for_load_state("load")
+                        # parse urls
+                        elements = await page.locator(
+                            "xpath=//div[starts-with(@class, 'g ')]//span/a[@href]"
+                        ).all()
+                        page_urls = [await e.get_attribute("href") for e in elements]
+                        search_urls.extend(page_urls)
+                        # click the "Next" button
+                        await page.locator("xpath=//td[@role='heading']").last.click()
                     logger.info(
-                        f"google_search() {keyword=} GOT {len(result_urls)} results"
+                        f"google_search() {keyword=} GOT {len(search_urls)} results"
                     )
                 except Exception as ex:
-                    result_urls = []
                     logger.warning(f"google_search() {type(ex).__name__}: {ex}")
 
                 # browse urls in parallel
-                tasks = [asyncio.create_task(self.abrowse(url)) for url in result_urls]
+                tasks = [asyncio.create_task(self.abrowse(url)) for url in search_urls]
                 await asyncio.gather(*tasks)
 
     def crawl(self):
