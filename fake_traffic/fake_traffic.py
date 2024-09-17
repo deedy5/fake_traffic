@@ -11,22 +11,20 @@ class FakeTraffic:
         self,
         country="US",
         language="en-US",
-        category="h",
+        keywords=None,
         headless=True,
         tabs=3,
     ):
         """Internet traffic generator. Utilizes real-time google search trends by specified parameters.
         country = country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/),
         language = country-language code ISO-639 and ISO-3166 (https://www.fincher.org/Utilities/CountryLanguageList.shtml),
-        category = category of interest of a user (defaults to 'h'):
-                'all' (all), 'b' (business), 'e' (entertainment),
-                'm' (health), 's' (sports), 't' (sci/tech), 'h' (top stories);
+        keywords = comma separated queries for Google searches, if not specified, Google trending is used,
         headless = True/False (defaults to True);
         tabs = limit the number of tabs in browser (defaults to 3).
         """
         self.country = country
         self.language = language
-        self.category = category
+        self.keywords = [k.strip() for k in keywords.split(",")] if keywords else []
         self.headless = headless
         self.browser = None
         self.semaphore = asyncio.Semaphore(tabs)
@@ -57,36 +55,37 @@ class FakeTraffic:
 
             page = await self.browser.new_page()
 
-            # google trends
-            try:
-                await page.goto(
-                    f"https://trends.google.com/trends/trendingsearches/realtime?geo={self.country}&hl={self.language}&category={self.category}",
-                    wait_until="networkidle",
-                )
-                elements = await page.query_selector_all("//div[@class='title']")
-                keywords = [
-                    x for e in elements for x in (await e.inner_text()).split(" • ")
-                ]
-                logger.info(f"google_trends() GOT {len(keywords)} keywords")
-            except Exception as ex:
-                keywords = []
-                logger.warning(f"google_trends() {type(ex).__name__}: {ex}")
+            if not self.keywords:
+                # google trends
+                try:
+                    await page.goto(
+                        f"https://trends.google.com/trends/trendingsearches/realtime?geo={self.country}&hl={self.language}&status=active",
+                        wait_until="load",
+                    )
+                    elements = await page.query_selector_all("//tbody//tr/td[2]/div[1]")
+                    self.keywords = [await e.inner_text() for e in elements]
+                    logger.info(f"google_trends() GOT {len(self.keywords)} keywords")
+                except Exception as ex:
+                    logger.exception(f"google_trends() {type(ex).__name__}: {ex}")
 
             # google search
-            for keyword in keywords:
+            for keyword in self.keywords:
                 search_urls = []
                 try:
                     await page.goto("https://www.google.com", wait_until="load")
                     await page.fill('textarea[name="q"]', keyword)
                     await page.press('textarea[name="q"]', "Enter")
                     # pagination
-                    for _ in range(10):
-                        await page.wait_for_load_state("load")
+                    for _ in range(3):
+                        await page.wait_for_load_state("domcontentloaded")
                         # parse urls
                         elements = await page.locator(
-                            "xpath=//div[starts-with(@class, 'g ')]//span/a[@href]"
+                            "xpath=//div[starts-with(@class, 'g ')]//span/a[@href] | //a[.//div[@role='heading']]"
                         ).all()
                         page_urls = [await e.get_attribute("href") for e in elements]
+                        page_urls = [
+                            x for x in page_urls if "https://www.youtube.com" not in x
+                        ]
                         search_urls.extend(page_urls)
                         # click the "Next" button
                         await page.locator("xpath=//td[@role='heading']").last.click()
@@ -108,7 +107,7 @@ if __name__ == "__main__":
     fake_traffic = FakeTraffic(
         country="US",
         language="en-US",
-        category="h",
+        keywords=None,
         headless=True,
         tabs=3,
     )

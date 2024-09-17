@@ -22,11 +22,10 @@ parser.add_argument(
     required=False,
 )
 parser.add_argument(
-    "-ca",
-    "--category",
-    default="h",
-    help="default=h. Variants: 'all' (all), 'b' (business), 'e' (entertainment), 'm' (health), 's' (sports), 't' (sci/tech), 'h' (top stories)",
-    choices=["all", "b", "e", "m", "s", "t", "h"],
+    "-k",
+    "--keywords",
+    default=None,
+    help="default=None. comma separated queries for Google searches, if not specified, Google trending is used",
     required=False,
 )
 parser.add_argument(
@@ -69,14 +68,14 @@ country = args.country.upper()
 language_split = args.language.split("-")
 language = f"{language_split[0]}-{language_split[1].upper()}"
 logging.info(
-    f"Run crawl with: {country=}, {language=}, category={args.category}, headless={args.headless}, tabs={args.tabs}, logfile={args.logfile}"
+    f"Run crawl with: {country=}, {language=}, keywords={args.keywords}, headless={args.headless}, tabs={args.tabs}, logfile={args.logfile}"
 )
 
 
 fake_traffic = FakeTraffic(
     country=country,
     language=language,
-    category=args.category,
+    keywords=args.keywords,
     headless=args.headless,
     tabs=args.tabs,
 )
