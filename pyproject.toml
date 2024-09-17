@@ -27,7 +27,7 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
-    "playwright>=1.45.0",
+    "playwright>=1.47.0",
 ]
 dynamic = ["version"]
 
