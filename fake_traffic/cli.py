@@ -45,6 +45,20 @@ parser.add_argument(
     required=False,
 )
 parser.add_argument(
+    "-dmin",
+    "--delay-min",
+    type=float,
+    help="Minimum delay between requests in seconds. Defaults to None",
+    required=False,
+)
+parser.add_argument(
+    "-dmax",
+    "--delay-max",
+    type=float,
+    help="Maximum delay between requests in seconds. Defaults to None",
+    required=False,
+)
+parser.add_argument(
     "-lf",
     "--logfile",
     action="store_true",
@@ -68,7 +82,7 @@ country = args.country.upper()
 language_split = args.language.split("-")
 language = f"{language_split[0]}-{language_split[1].upper()}"
 logging.info(
-    f"Run crawl with: {country=}, {language=}, keywords={args.keywords}, headless={args.headless}, tabs={args.tabs}, logfile={args.logfile}"
+    f"Run crawl with: {country=}, {language=}, keywords={args.keywords}, headless={args.headless}, tabs={args.tabs}, logfile={args.logfile}, delay_min={args.delay_min}, delay_max={args.delay_max}"
 )
 
 
@@ -78,4 +92,6 @@ fake_traffic = FakeTraffic(
     keywords=args.keywords,
     headless=args.headless,
     tabs=args.tabs,
+    delay_min=args.delay_min,
+    delay_max=args.delay_max,
 )

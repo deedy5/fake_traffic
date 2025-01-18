@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from random import uniform
 
 from playwright.async_api import async_playwright
 
@@ -14,6 +15,8 @@ class FakeTraffic:
         keywords: str | None = None,
         headless: bool = True,
         tabs: int = 3,
+        delay_min: float | None = None,
+        delay_max: float | None = None,
     ):
         """Internet traffic generator. Utilizes real-time google search trends by specified parameters.
 
@@ -23,13 +26,24 @@ class FakeTraffic:
             keywords (str | None): Comma separated queries for Google searches. If not specified, Google trending is used. Defaults to None.
             headless (bool): Whether to run the browser in headless mode. Defaults to True.
             tabs (int): Limit the number of tabs in browser. Defaults to 3.
+            delay_min (float | None): Minimum delay between requests in seconds. Defaults to None.
+            delay_max (float | None): Maximum delay between requests in seconds. Defaults to None.
         """
         self.country = country
         self.language = language
         self.keywords = [k.strip() for k in keywords.split(",")] if keywords else []
         self.headless = headless
+        self.tabs = tabs
+        self.delay_min = delay_min
+        self.delay_max = delay_max
         self.browser = None
         self.semaphore = asyncio.Semaphore(tabs)
+
+    async def _delay(self, delay_min=None, delay_max=None):
+        if delay_min and delay_max:
+            await asyncio.sleep(uniform(delay_min, delay_max))
+        elif delay_min or delay_max:
+            await asyncio.sleep(delay_min or delay_max)
 
     async def abrowse(self, url):
         async with self.semaphore:
@@ -37,6 +51,7 @@ class FakeTraffic:
             try:
                 resp = await page.goto(url, wait_until="load")
                 logger.info(f"{resp.status} {resp.url}")
+                await self._delay(self.delay_min, self.delay_max)
             except Exception as ex:
                 logger.warning(
                     f"{type(ex).__name__}: {ex} {url if url not in str(ex) else ''}"

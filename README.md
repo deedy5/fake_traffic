@@ -1,4 +1,4 @@
-[![Python >= 3.8](https://img.shields.io/badge/python->=3.8-red.svg)](https://www.python.org/downloads/) [![](https://badgen.net/github/release/deedy5/fake_traffic)](https://github.com/deedy5/fake_traffic/releases) [![](https://badge.fury.io/py/fake-traffic.svg)](https://pypi.org/project/fake-traffic) 
+[![Python >= 3.8](https://img.shields.io/badge/python->=3.8-red.svg)](https://www.python.org/downloads/) [![](https://badgen.net/github/release/deedy5/fake_traffic)](https://github.com/deedy5/fake_traffic/releases) [![](https://badge.fury.io/py/fake-traffic.svg)](https://pypi.org/project/fake-traffic)
 # fake_traffic
 Internet traffic generator. Utilizes real-time google search trends by specified parameters.
 
@@ -28,8 +28,10 @@ fake_traffic -c tr -l ku-tr
 fake_traffic -c ru -l ru-ru -lf
 # use none-headless mode
 fake_traffic -c en -l en-us -nh
-# limit the number of tabs in the browser to 2 
+# limit the number of tabs in the browser to 2
 fake_traffic -c en -l en-us -t 2
+# add an random delay (30-120 seconds) between requests
+fake_traffic -c en -l en-us -t 1 -dmin 30 -dmax 120
 ```
 ---
 ### Simple usage
@@ -45,12 +47,15 @@ from fake_traffic import FakeTraffic
 
 ft = FakeTraffic(country="US", language="en-US", category="h", headless=True)
     """Internet traffic generator. Utilizes real-time google search trends by specified parameters.
-    country = country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/),
-    language = country-language code ISO-639 and ISO-3166 (https://www.fincher.org/Utilities/CountryLanguageList.shtml),
-    keywords = comma separated queries for Google searches, if not specified, Google trending is used,
-    headless = True/False (defaults to True);
-    tabs = limit the number of tabs in browser (defaults to 3).
+    country (str): Country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/), Defaults to "US".
+    language (str): Country-language code ISO-639 and ISO-3166 (https://www.fincher.org/Utilities/CountryLanguageList.shtml). Defaults to "en-US".
+    keywords (str | None): Comma separated queries for Google searches. If not specified, Google trending is used. Defaults to None.
+    headless (bool): Whether to run the browser in headless mode. Defaults to True.
+    tabs (int): Limit the number of tabs in browser. Defaults to 3.
+    delay_min (float | None): Minimum delay between requests in seconds. Defaults to None.
+    delay_max (float | None): Maximum delay between requests in seconds. Defaults to None.
     """
+
 ft.crawl()
 ```
 ---
@@ -73,7 +78,7 @@ from fake_traffic import FakeTraffic
 ft = FakeTraffic(country="TR", language="ku-TR", keywords=None, headless=False)
 ft.crawl()
 ```
-P.S. you can select language from other country. 
+P.S. you can select language from other country.
 For example, such combinations are also correct:
 ```python3
 FakeTraffic(country="TR", language="ar-TR").crawl()
@@ -94,4 +99,3 @@ Brazil | Portuguese | `FakeTraffic(country="BR", language="pt-BR")` |
 United Kingdom | English   | `FakeTraffic(country="GB", language="en-GB")` |
 United States  | English   | `FakeTraffic(country="US", language="en-US", tabs=4)` |
 United States  | Hebrew Israel   | `FakeTraffic(country="US", language="he-IL")` |
-
