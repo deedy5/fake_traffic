@@ -1,4 +1,4 @@
-[![Python >= 3.8](https://img.shields.io/badge/python->=3.8-red.svg)](https://www.python.org/downloads/) [![](https://badgen.net/github/release/deedy5/fake_traffic)](https://github.com/deedy5/fake_traffic/releases) [![](https://badge.fury.io/py/fake-traffic.svg)](https://pypi.org/project/fake-traffic)
+[![Python >= 3.9](https://img.shields.io/badge/python->=3.9-red.svg)](https://www.python.org/downloads/) [![](https://badgen.net/github/release/deedy5/fake_traffic)](https://github.com/deedy5/fake_traffic/releases) [![](https://badge.fury.io/py/fake-traffic.svg)](https://pypi.org/project/fake-traffic)
 # fake_traffic
 Internet traffic generator. Utilizes real-time google search trends by specified parameters.
 
