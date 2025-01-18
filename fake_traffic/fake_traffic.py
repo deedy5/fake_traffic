@@ -9,18 +9,20 @@ logger = logging.getLogger("__name__")
 class FakeTraffic:
     def __init__(
         self,
-        country="US",
-        language="en-US",
-        keywords=None,
-        headless=True,
-        tabs=3,
+        country: str = "US",
+        language: str = "en-US",
+        keywords: str | None = None,
+        headless: bool = True,
+        tabs: int = 3,
     ):
         """Internet traffic generator. Utilizes real-time google search trends by specified parameters.
-        country = country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/),
-        language = country-language code ISO-639 and ISO-3166 (https://www.fincher.org/Utilities/CountryLanguageList.shtml),
-        keywords = comma separated queries for Google searches, if not specified, Google trending is used,
-        headless = True/False (defaults to True);
-        tabs = limit the number of tabs in browser (defaults to 3).
+
+        Args:
+            country (str): Country code ISO 3166-1 Alpha-2 code (https://www.iso.org/obp/ui/), Defaults to "US".
+            language (str): Country-language code ISO-639 and ISO-3166 (https://www.fincher.org/Utilities/CountryLanguageList.shtml). Defaults to "en-US".
+            keywords (str | None): Comma separated queries for Google searches. If not specified, Google trending is used. Defaults to None.
+            headless (bool): Whether to run the browser in headless mode. Defaults to True.
+            tabs (int): Limit the number of tabs in browser. Defaults to 3.
         """
         self.country = country
         self.language = language
