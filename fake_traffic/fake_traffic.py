@@ -73,6 +73,9 @@ class FakeTraffic:
                 search_urls = []
                 try:
                     await page.goto("https://www.google.com", wait_until="load")
+                    accept_all = await page.is_visible("#L2AGLb")
+                    if accept_all:
+                        await page.click("#L2AGLb")
                     await page.fill('textarea[name="q"]', keyword)
                     await page.press('textarea[name="q"]', "Enter")
                     # pagination
